@@ -1,0 +1,486 @@
+#+PROPERTY: header-args    :exports both
+* Exercise 1.1
+#+BEGIN_SRC scheme
+10
+#+END_SRC
+
+#+RESULTS:
+: 10
+
+Answer: 10
+
+#+BEGIN_SRC scheme
+(+ 5 3 4)
+#+END_SRC
+
+#+RESULTS:
+: 12
+
+Answer: 12
+
+#+BEGIN_SRC scheme
+(- 9 1)
+#+END_SRC
+
+#+RESULTS:
+: 8
+
+Answer: 8
+#+BEGIN_SRC scheme
+(/ 6 2)
+#+END_SRC
+
+#+RESULTS:
+: 3
+
+Answer: 3
+
+
+#+BEGIN_SRC scheme
+(+ (* 2 4) (- 4 6))
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+Answer: 6
+
+#+BEGIN_SRC scheme
+(define a 3)
+#+END_SRC
+#+RESULTS:
+: #<unspecified>
+
+#+BEGIN_SRC scheme
+(define b (+ a 1))
+#+END_SRC
+
+
+
+#+BEGIN_SRC scheme
+(define a 3)
+(define b (+ a 1))
+(+ a 2)
+#+END_SRC
+
+#+RESULTS:
+: 5
+
+Answer: 5
+
+#+BEGIN_SRC scheme var: a=a b=b
+(define a 3)
+(define b (+ a 1))
+(+ a b (* a b))
+#+END_SRC
+
+#+RESULTS:
+: 19
+Answer: 21
+
+#+BEGIN_SRC scheme
+(define a 3)
+(define b (+ a 1))
+(= a b)
+#+END_SRC
+
+#+RESULTS:
+: #f
+
+#+BEGIN_SRC scheme
+(define a 3)
+(define b (+ a 1))
+(if (and (> b a) (< b (* a b)))
+              b
+              a)
+#+END_SRC
+
+#+RESULTS:
+: 4
+
+Answer: 4
+
+#+BEGIN_SRC scheme
+(define a 3)
+(define b (+ a 1))
+(cond ((= a 4) 6)
+      ((= b 4) (+ 6 7 a))
+      (else 25))
+#+END_SRC
+
+#+RESULTS:
+: 16
+
+Answer: 16. Second predicate.
+
+#+BEGIN_SRC scheme
+(define a 3)
+(define b (+ a 1))
+(+ 2 (if (> b a) b a))
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+Answer: 6. 2 + 4, since b is greater than a.
+
+#+BEGIN_SRC scheme
+(define a 3)
+(define b (+ a 1))
+(* (cond ((> a b) a)
+         ((< a b) b)
+         (else -1))
+   (+ a 1))
+#+END_SRC
+
+#+RESULTS:
+: 16
+
+Answer: 16, B*(A+1). second predicate
+
+* Exercise 1.2
+Translate the following expression into prefix form.
+
+          5 + 4 + (2 - (3 - (6 + 4/5)))
+          -----------------------------
+                 3(6 - 2)(2 - 7)
+
+#+BEGIN_SRC scheme
+(/ (+ 5
+      4
+      (- 2
+         (- 3
+            (+ 6
+               (/ 4 5)))))
+   (* 3
+      (- 6 2)
+      (- 7 2)))
+#+END_SRC
+
+#+RESULTS:
+: 37/150
+
+* Exercise 1.3
+#+BEGIN_SRC scheme :results output
+(define (sum-squares x y)
+  (+ (* x x) (* y y)))
+
+(define (>= x y)
+       (not (< x y)))
+
+(define (proc x y z)
+  (cond ((and (>= x z)
+              (>= y z))
+        (sum-squares x y))
+        ((and (>= x y)
+              (>= z y))
+        (sum-squares x z))
+        ((and (>= y x)
+              (>= z x))
+        (sum-squares y z ))))
+(display (proc 2 10 5))
+(display "\n")
+(display (proc 1 2 2))
+(display "\n")
+(display (proc 5 3 1))
+#+END_SRC
+
+#+RESULTS:
+: 125
+: 8
+: 34
+
+* Exercise 1.4
+If be is positive, the if statement will evaluate to `+`. So the procedure will evaluate to `(+ a b)`. Conversely, if the statement is negative, it will evaluate to `(- a b)`. The result is that the procedure will return a plus the absolute value of b.
+
+* Exercise 1.5
+We have:
+
+#+BEGIN_SRC scheme
+(define (p) (p))
+(define (test x y)
+  (if (= x 0)
+      0
+      y))
+;;(test 0 (p))
+#+END_SRC
+
+#+RESULTS:
+: #<unspecified>
+
+In an interpreter that uses *applicative-order* evaluation, we'll enter an infinite loop.
+The reason is that the interpreter evaluates the operator, and the *operands*. When we expand the operator there are no issues, but when we expand the operand we enter an infinite loop.
+
+In an interpreter that uses *normal-order* evaluation, it will return `0`. The reason is that the operands are not evaluated until needed. Since x is equal to 0 when we call the procedure, the if statement will return 0 without evaluatin the argument `y`, which is the procedure p that was causing the infinie loop in the applicative-order case.
+
+* Exercise 1.6
+New-if will use applicative-order evaluation. This means that the operands of the proceudre will be evaluated before cond, entering a loop when it has to evaluate sqrt-iter in the second predicate.
+
+* Exercise 1.7
+#+BEGIN_SRC scheme :results output
+(define (sqrt-iter guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x)
+                 x)))
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (square x)
+  (* x x))
+
+(define (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+(display (square (sqrt-iter 1 1e-20)))
+(display "\n")
+(display (square (sqrt-iter 1 1e-3)))
+(display "\n")
+(display (square (sqrt-iter 1 1e-4)))
+(display "\n")
+(display (square (sqrt-iter 1 1e-5)))
+(display "\n")
+(display (square (sqrt-iter 1 1e21)))
+#+END_SRC
+#+RESULTS:
+: 9.765625e-4
+: 0.0017011851721075596
+: 0.0010438358335233748
+: 9.832294718753643e-4
+
+
+If the square of the guess differs less than 0.001 from the number, that will be returned as a result. But if the number is less than 0.001, this means that we will end up returning results close to `sqrt(0.001)`, as `x` in the difference will be much lower than `(square guess)`.
+
+For large numbers, we will enter an infinite loop. The reason is that due to limited precision, given a large enough number (- (square guess) x) will never been less than 0.001, we won't have so many significant digits..
+
+#+BEGIN_SRC scheme :results output
+(define (sqrt-iter guess previous-guess x)
+  (if (good-enough? guess previous-guess)
+      guess
+      (sqrt-iter (improve guess x) guess
+                 x)))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (square x)
+  (* x x))
+
+(define (good-enough? guess previous-guess)
+  (< (/(abs (- guess previous-guess)) guess) 1e-6))
+
+(define (sqrt x)
+  (sqrt-iter 1.0 0 x))
+
+(display (square (sqrt 1e-20)))
+(display "\n")
+(display (square (sqrt 1e-3)))
+(display "\n")
+(display (square (sqrt 1e-4)))
+(display "\n")
+(display (square (sqrt 1e-5)))
+(display "\n")
+(display (square (sqrt 1e21)))
+#+END_SRC
+
+#+RESULTS:
+: 9.999999999999998e-21
+: 0.001000000000000034
+: 1.0e-4
+: 1.0e-5
+: 1.0000000000000033e21
+
+* Exercise 1.8
+Square root formula:
+x/y^2 + 2y
+----------
+    3
+
+#+BEGIN_SRC scheme :results output
+  (define (curt-iter guess previous-guess x)
+    (if (good-enough? guess previous-guess)
+        guess
+        (curt-iter (improve x guess) guess
+                    x)))
+
+  ;;(define (improve guess x)
+  ;;  (average guess (/ x guess)))
+
+  (define (improve x y)
+    (/ (+ (/ x 
+             (square y))
+          (* 2 y))
+       3))
+
+  (define (square x)
+    (* x x))
+
+  (define (cube x)
+    (* x x x))
+
+  (define (good-enough? guess previous-guess)
+    (< (/(abs (- guess previous-guess)) guess) 1e-3))
+
+  (define (curt x)
+    (curt-iter 1.0 0 x))
+
+  (display (cube (curt 8)))
+  (display "\n")
+  (display (cube (curt 27)))
+  (display "\n")
+  (display (cube (curt 1e-4)))
+  (display "\n")
+  (display (cube (curt 1e-5)))
+  (display "\n")
+  (display (cube (curt 1e21)))
+#+END_SRC
+
+#+RESULTS:
+: 8.000000000144743
+: 27.000014608735402
+: 1.0000000152937715e-4
+: 1.0000000035166185e-5
+: 1.00000023543326e21
+* Exercise 1.9
+
+#+NAME procedure A
+#+BEGIN_SRC scheme
+          (define (+ a b)
+            (if (= a 0)
+                b
+                (inc (+ (dec a) b))))
+#+END_SRC
+
+(+ 4 5)
+(inc (+ 3 5))
+(inc (inc (+ 2 5)))
+(inc (inc (inc (+ 1 5))))
+(inc (inc (inc (inc (+ 0 5)))))
+(inc (inc (inc (inc 5))))
+(inc (inc (inc 6)))
+(inc (inc 7))
+(inc 8)
+9
+
+It's a linear recursive process.
+
+#+NAME procedure B
+#+BEGIN_SRC scheme
+          (define (+ a b)
+            (if (= a 0)
+                b
+                (+ (dec a) (inc b))))
+#+END_SRC
+
+(+ 4 5)
+(+ 3 6)
+(+ 2 7)
+(+ 1 8)
+(+ 0 9)
+9
+
+It's a linear iterative process
+* Exercise 1.10
+#+BEGIN_SRC scheme
+          (define (A x y)
+            (cond ((= y 0) 0)
+                  ((= x 0) (* 2 y))
+                  ((= y 1) 2)
+                  (else (A (- x 1)
+                           (A x (- y 1))))))
+#+END_SRC
+
+(A 1 10)
+(A 0 (A 1 9))
+(A 0 (A 0 (A 1 8)))
+...
+(A 0 ... (A 0 1))
+
+This will result in 2^10=1024
+
+(A 2 4)
+(A 1 (A 2 3))
+(A 1 (A 1 (A 1 2)))
+
+We know that (A 1 2) = 2^2
+then this resuls in
+2^2^2
+
+(define (f n) (A 0 n))
+(f n) computes 2*n
+
+(define (g n) (A 1 n))
+(g n) computes 2^n
+
+(define (h n) (A 2 n))
+(h n) computes 2^2........^2 (n-1 times)
+* Exercise 1.11
+#+BEGIN_SRC scheme
+(define (f n)
+  (if (< n 3)
+      n
+      (+ (f (- n 1))
+         (* 2 (f (- n 2)))
+         (* 3 (f (- n 3))))))
+(f 35)
+#+END_SRC
+
+#+RESULTS:
+: 4630608915694
+
+#+BEGIN_SRC scheme
+    (define (f n)
+      (if (< n 3)
+          n
+          (f-iter 2 1 0 (- n 2))))
+
+    (define (f-iter n1 n2 n3 count)
+      (if (= count 0)
+          n1
+          (f-iter (+ n1 (* n2 2) (* n3 3)) 
+                  n1
+                  n2
+                  (- count 1))))
+  (f 35)
+#+END_SRC
+
+#+RESULTS:
+: 4630608915694
+
+The linear iterative process is much faster.
+* Exercise 1.12
+Row and column are 0-indexed.
+
+#+BEGIN_SRC scheme :results output
+  (define (pascal-iter row column)
+    (cond ((= row column)
+           1)
+          ((= column 0)
+           1)
+          (else (+ (pascal-iter (- row 1) (- column 1))
+                   (pascal-iter (- row 1) column)))))
+
+  (display "Testing some known values\n")
+  (display (pascal-iter 3 1))
+  (display "\n")
+  (display (pascal-iter 4 2))
+  (display "\n")
+  (display (pascal-iter 5 3))
+  (display "\n")
+  (display (pascal-iter 10 5))
+#+END_SRC
+
+#+RESULTS:
+: Testing some known values
+: 3
+: 6
+: 10
+: 252
+
+TODO. This process is tree-recursive. Can we make it linear iterative?

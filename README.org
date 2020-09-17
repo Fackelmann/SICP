@@ -1,0 +1,16 @@
+#+TITLE: SICP Chapter 1 exercises
+#+AUTHOR: Daniel Gonzalez Plaza
+
+As Voltaire (allegedly) said:
+
+#+BEGIN_QUOTE
+The best is the enemy of the good.
+#+END_QUOTE
+
+And with that in mind I'm uploading my take at the exercises from Structure and Implementation of Computer Programs (SICP).
+
+They are not beautiful, they are not perfect, but they are my take at them; I hope they are useful to someone.
+
+From a selfish point of view, putting them out in public and showing that I'm working through them is also a way to held me accountable and finish the book (my second try at it).
+
+Anyway, after this disclaimer, here we go.
