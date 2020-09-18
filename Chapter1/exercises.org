@@ -536,6 +536,11 @@ Let's plot the time it takes it to execute the recursive algorithm versus a rang
 #+END_SRC
 
 #+RESULTS:
-[[file:coin_change_complexity.png][Coin Change Complexity]]
+[coin_change_complexity.png]
 
 It looks like exponential growth.
+
+(It seems that github doesn't support embedding images in org mode documents. If it still doesn't work, just open the file ~coin_change_complexity.png~ under this same directory.)
+
+
+
