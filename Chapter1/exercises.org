@@ -495,3 +495,47 @@ Row and column are 0-indexed.
 : 252
 
 TODO. This process is tree-recursive. Can we make it linear iterative?
+* Exercixe 1.14
+
+Let's plot the time it takes it to execute the recursive algorithm versus a range of amounts. This will give us a proxy for the order of growth of the steps:
+
+#+BEGIN_SRC python :results file
+  import matplotlib.pyplot as plt
+  import time
+  COINS = [1, 5, 10, 25, 50]
+  def count_change(amount):
+      def count_change_iter(amount, coin_idx):
+          if amount == 0:
+              return 1
+          elif amount < 0 or coin_idx < 0:
+              return 0
+          else:
+              return count_change_iter(amount, coin_idx-1) +\
+                  count_change_iter(amount - COINS[coin_idx], coin_idx)
+
+      return count_change_iter(amount, 4)
+
+  print(count_change(100))
+
+  elapsed_time = []
+  for i in range(300):
+      start_time = time.time()
+      count_change(i)
+      end_time = time.time()
+      elapsed_time.append(end_time-start_time)
+
+  fig, ax=plt.subplots()
+
+  plt.plot(elapsed_time)
+  ax.set_xlabel("Amount")
+  ax.set_ylabel("Time (s)")
+  ax.grid(True)
+  plt.savefig("coin_change_complexity.png")
+  return "coin_change_complexity.png"
+
+#+END_SRC
+
+#+RESULTS:
+[[file:coin_change_complexity.png]]
+
+It looks like exponential growth.
