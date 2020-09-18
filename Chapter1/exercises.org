@@ -536,6 +536,6 @@ Let's plot the time it takes it to execute the recursive algorithm versus a rang
 #+END_SRC
 
 #+RESULTS:
-[[file:coin_change_complexity.png]]
+[[file:coin_change_complexity.png][Coin Change Complexity]]
 
 It looks like exponential growth.
