@@ -643,3 +643,37 @@ We will keep an acumulator, a, that will be multiplied by b every time that n is
 : 28
 : 75
 
+* Exercise 1.18
+
+We can also make it a linear iterative process, similar to what we did with fast exponentiation.
+
+#+BEGIN_SRC scheme :results output
+  (define (mult a b)
+    (mult-iter a b 0))
+
+  (define (mult-iter a b acc)
+    (cond ((= b 0)
+           acc)
+          ((even? b)
+           (mult-iter (double a) (halve b) acc))
+          (else
+           (mult-iter a (- b 1) (+ acc a)))))
+
+
+  (define (even? n)
+    (= (remainder n 2) 0))
+
+  (define (double a)
+    (+ a a))
+
+  (define (halve a)
+    (/ a 2))
+
+  (display (mult 4 7))
+  (display "\n")
+  (display (mult 5 15))
+#+END_SRC
+
+#+RESULTS:
+: 28
+: 75
