@@ -1,4 +1,8 @@
-#+PROPERTY: header-args    :export both
+#+PROPERTY: header-args    :exports both
+This is an org-mode file with ~scheme~ code blocks. If you clone this repo you can execute each block inside this file with ~C-c C-c~.
+
+Because of some mysterious reason, results don't show up in the rendered github file. You can see them by opening the raw file.
+ 
 * Exercise 1.1
 #+BEGIN_SRC scheme
 10
