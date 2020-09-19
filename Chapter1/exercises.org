@@ -536,7 +536,8 @@ Let's plot the time it takes it to execute the recursive algorithm versus a rang
 #+END_SRC
 
 #+RESULTS:
-[coin_change_complexity.png]
+[[file:coin_change_complexity.png]]
+
 
 It looks like exponential growth.
 
@@ -544,3 +545,30 @@ It looks like exponential growth.
 
 
 
+Analytically (kind of) we can consider the case where we have (cc amount 1). In this case we will have 2 branches per step, with ~amount~ steps. This is:
+Space: ~O(2n)=O(n)~
+Steps: ~O(n)~
+
+Now, what happens with ~(cc amount 2)~? It will branch in 2 different branches:
+- One will be ~(cc amount 1)~, with the complexity previously mentioned.
+- The other one will be ~(cc (- amount kind-of-coin (2)) 2)~. Which will keep branching the same way until amount is 0.
+
+So we will have ~n * O(n) = O(n^2)~
+Since we have 5 types of coins, the final complexity for space and steps will be ~O(n^5)~.
+
+DISCLAIMER: This is not a full proof; more of an inspiration for a proof. I also originally saw this approach in someone else's solution, but I've lost track of it. Sorry! I will add the reference here if I find it again.
+* Exercise 1.15
+a. It's evaluated 5 times
+b. In order to finish the recursion we have:
+#+BEGIN_SRC
+0.1 * 3^x > a
+#+END_SRC
+
+It follows that:
+#+BEGIN_SRC
+3^x > a/0.1
+x > log_3 a/0.1
+x = ceil(log_3 a/0.1)
+#+END_SRC
+
+Therefore, the order of growth is ~O(log n)~
