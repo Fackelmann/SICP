@@ -614,3 +614,32 @@ We will keep an acumulator, a, that will be multiplied by b every time that n is
 #+RESULTS:
 : 243
 : 78125
+* Exercise 1.17
+#+BEGIN_SRC scheme :results output
+  (define (mult a b)
+    (cond ((= b 1)
+           a)
+          ((even? b)
+           (mult (double a) (halve b)))
+          (else
+           (+ a (mult a (- b 1))))))
+
+
+  (define (even? n)
+    (= (remainder n 2) 0))
+
+  (define (double a)
+    (+ a a))
+
+  (define (halve a)
+    (/ a 2))
+
+(display (mult 4 7))
+(display "\n")
+(display (mult 5 15))
+#+END_SRC
+
+#+RESULTS:
+: 28
+: 75
+
