@@ -573,3 +573,40 @@ x = ceil(log_3 a/0.1)
 #+END_SRC
 
 Therefore, the order of growth is ~O(log n)~
+* Exercise 1.16
+
+Write linear iterative process for fast exponenciation.
+
+#+BEGIN_SRC
+b^n = (b^2)^(n/2) if n is even
+b^n = b*b^(n-q) if n is odd
+#+END_SRC
+
+We will keep an acumulator, a, that will be multiplied by b every time that n is odd in the recursive prodecure.
+
+#+BEGIN_SRC scheme :results output
+  (define (expt b n)
+    (fast-exp b n 1))
+
+  (define (fast-exp b n a)
+    (cond ((= n 0)
+           a)
+          ((even? n)
+           (fast-exp (square b) (/ n 2) a))
+          (else
+           (fast-exp b (- n 1) (* a b)))))
+
+  (define (even? n)
+    (= (remainder n 2) 0))
+
+  (define (square x)
+    (* x x))
+(display (expt 3 5))
+(display "\n")
+(display (expt 5 7))
+
+#+END_SRC
+
+#+RESULTS:
+: 243
+: 78125
