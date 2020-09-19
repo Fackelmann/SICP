@@ -1,4 +1,4 @@
-#+PROPERTY: header-args    :exports both
+#+PROPERTY: header-args    :export both
 * Exercise 1.1
 #+BEGIN_SRC scheme
 10
