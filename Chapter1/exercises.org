@@ -809,3 +809,151 @@ q' = 2pq + q^2
 : 199
 : 1999
 : 7
+
+* Exercise 1.22
+
+#+BEGIN_SRC scheme :results output
+  (define (smallest-divisor n)
+    (find-divisor n 2))
+
+  (define (find-divisor n test-divisor)
+    (cond ((> (square test-divisor) n) n)
+          ((divides? test-divisor n) test-divisor)
+          (else (find-divisor n (+ test-divisor 1)))))
+
+  (define (divides? a b)
+    (= (remainder b a) 0))
+
+  (define (prime? n)
+    (= n (smallest-divisor n)))
+
+  (define (timed-prime-test n)
+    (start-prime-test n (runtime)))
+
+  (define (start-prime-test n start-time)
+    (if (prime? n)
+        (report-prime (- (runtime) start-time) n )))
+
+  (define (report-prime elapsed-time n)
+    (display "\n *** \n")
+    (display n)
+    (display "\n")
+    (display elapsed-time))
+    (display "\n")
+
+  (define (find-prime-numbers-from n max)
+    (define (loop n max)
+      (cond ((< n max)
+             (timed-prime-test n) (loop (+ n 1) max))))
+    (loop n max))
+
+  (find-prime-numbers-from 1e3 1e4)
+#+END_SRC
+
+#+RESULTS:
+: ice-9/boot-9.scm:1669:16: In procedure raise-exception:
+: Unbound variable: runtime
+: 
+: Entering a new prompt.  Type `,bt' for a backtrace or `,q' to continue.
+: scheme@(guile-user) [1]> 
+
+For example:
+#+BEGIN_SRC
+100000007.
+9.999999999999787e-3
+#+END_SRC
+
+and
+
+#+BEGIN_SRC
+1000000007.
+.06000000000000005
+#+END_SRC
+
+We see that a factor of 10 increases the runtime by ~3, which is, approximately, sqrt(10)
+
+* Exercise 1.23
+
+#+BEGIN_SRC scheme :results output
+  (define (smallest-divisor n)
+    (find-divisors n 2))
+
+  (define (find-divisors n d)
+    (cond ((> (square d) n)
+           n)
+          ((divides? d n)
+           d)
+          (else
+           (find-divisors n (+ d 1)))))
+
+  (define (square a)
+    (* a a))
+
+  (define (divides? d a)
+    (= (remainder a d) 0))
+
+  (display (smallest-divisor 199))
+  (display "\n")
+  (display (smallest-divisor 1999))
+  (display "\n")
+  (display (smallest-divisor 19999))
+  (display "\n")
+#+END_SRC 
+
+#+RESULTS:
+: 199
+: 1999
+: 7
+
+* Exercise 1.24
+
+#+BEGIN_SRC scheme :results output
+  (define (smallest-divisor n)
+    (find-divisor n 2))
+
+  (define (next test-divisor)
+     (if (= test-divisor 2)
+         3
+         (+ test-divisor 2)))
+
+  (define (find-divisor n test-divisor)
+    (cond ((> (square test-divisor) n) n)
+          ((divides? test-divisor n) test-divisor)
+          (else (find-divisor n (next test-divisor)))))
+
+  (define (divides? a b)
+    (= (remainder b a) 0))
+
+  (define (prime? n)
+    (= n (smallest-divisor n)))
+
+  (define (timed-prime-test n)
+    (start-prime-test n (runtime)))
+
+  (define (start-prime-test n start-time)
+    (if (prime? n)
+        (report-prime (- (runtime) start-time) n )))
+
+  (define (report-prime elapsed-time n)
+    (display "\n *** \n")
+    (display n)
+    (display "\n")
+    (display elapsed-time))
+    (display "\n")
+
+  (define (find-prime-numbers-from n max)
+    (define (loop n max)
+      (cond ((< n max)
+             (timed-prime-test n) (loop (+ n 1) max))))
+    (loop n max))
+
+  (find-prime-numbers-from 1e3 1e4)
+#+END_SRC
+
+We see:
+#+BEGIN_SRC
+1000000007.
+.03000000000000025
+#+END_SRC
+
+Time is exactly halved in this case.
