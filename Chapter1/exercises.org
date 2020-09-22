@@ -777,3 +777,35 @@ q' = 2pq + q^2
 2
 #+END_SRC
 4 remainder operations
+
+* Exercise 1.21
+#+BEGIN_SRC scheme :results output
+  (define (smallest-divisor n)
+    (find-divisors n 2))
+
+  (define (find-divisors n d)
+    (cond ((> (square d) n)
+           n)
+          ((divides? d n)
+           d)
+          (else
+           (find-divisors n (+ d 1)))))
+
+  (define (square a)
+    (* a a))
+
+  (define (divides? d a)
+    (= (remainder a d) 0))
+
+  (display (smallest-divisor 199))
+  (display "\n")
+  (display (smallest-divisor 1999))
+  (display "\n")
+  (display (smallest-divisor 19999))
+  (display "\n")
+#+END_SRC 
+
+#+RESULTS:
+: 199
+: 1999
+: 7
