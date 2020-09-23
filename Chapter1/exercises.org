@@ -876,39 +876,6 @@ We see that a factor of 10 increases the runtime by ~3, which is, approximately,
 
 #+BEGIN_SRC scheme :results output
   (define (smallest-divisor n)
-    (find-divisors n 2))
-
-  (define (find-divisors n d)
-    (cond ((> (square d) n)
-           n)
-          ((divides? d n)
-           d)
-          (else
-           (find-divisors n (+ d 1)))))
-
-  (define (square a)
-    (* a a))
-
-  (define (divides? d a)
-    (= (remainder a d) 0))
-
-  (display (smallest-divisor 199))
-  (display "\n")
-  (display (smallest-divisor 1999))
-  (display "\n")
-  (display (smallest-divisor 19999))
-  (display "\n")
-#+END_SRC 
-
-#+RESULTS:
-: 199
-: 1999
-: 7
-
-* Exercise 1.24
-
-#+BEGIN_SRC scheme :results output
-  (define (smallest-divisor n)
     (find-divisor n 2))
 
   (define (next test-divisor)
@@ -947,7 +914,7 @@ We see that a factor of 10 increases the runtime by ~3, which is, approximately,
              (timed-prime-test n) (loop (+ n 1) max))))
     (loop n max))
 
-  (find-prime-numbers-from 1e3 1e4)
+  (find-prime-numbers-from 1e9 1e10)
 #+END_SRC
 
 We see:
@@ -957,3 +924,77 @@ We see:
 #+END_SRC
 
 Time is exactly halved in this case.
+* Exercise 1.24
+
+#+BEGIN_SRC scheme :results output
+
+  (define (even? num)
+    (= (remainder num 2) 0))
+
+  (define (expmod base exp m)
+    (cond ((= exp 0) 1)
+          ((even? exp)
+           (remainder (square (expmod base (/ exp 2) m))
+                      m))
+          (else
+           (remainder (* base (expmod base (- exp 1) m))
+                      m))))
+
+  (define (fermat-test n)
+    (define (try-it a)
+      (= (expmod a n n) a))
+    (try-it (+ 1 (random (- n 1)))))
+
+  (define (fast-prime? n times)
+    (cond ((= times 0) true)
+          ((fermat-test n) (fast-prime? n (- times 1)))
+          (else false)))
+
+  (define (prime? n)
+    (fast-prime? n 20))
+
+  (define (timed-prime-test n)
+    (start-prime-test n (runtime)))
+
+  (define (start-prime-test n start-time)
+    (if (prime? n)
+        (report-prime (- (runtime) start-time) n )))
+
+  (define (report-prime elapsed-time n)
+    (display "\n *** \n")
+    (display n)
+    (display "\n")
+    (display elapsed-time)
+    (display "\n"))
+
+  (define (find-prime-numbers-from n max)
+    (define (loop n max)
+      (cond ((< n max)
+             (timed-prime-test n) (loop (+ n 1) max))))
+    (loop n max))
+
+  (find-prime-numbers-from 1e9 1e10)
+#+END_SRC
+
+
+And 
+#+BEGIN_SRC
+(timed-prime-test 1000000007)
+
+ *** 
+1000000007
+0.
+#+END_SRC
+
+It reports it as a prime and the runtime is virtually 0.
+
+* Exercise 1.25
+Let's start by pointing out an important property of modular arithmetic, which ~expmod~ is based on (it took me a while to understand how ~expmod~ worked, but this should make it clear):
+
+#+BEGIN_SRC
+(A * B) mod C = (A mod C * B mod C) mod C
+#+END_SRC
+
+When using this property to implement expmod, we end up having remainder operations where the divided < divisor, which is computationally fast to do, O(1) per remainder operation.
+
+In contrast we have Alyssa's procedure. This procedure will compute the exponential in logarithmic time, no issue there. But then we need to calculate the reminder of a *very* large number. This is computationally expensive. This bound seems to be O(n log q) ([[https://cs.stackexchange.com/questions/12931/complexity-of-taking-mod][StackExchange]]), so we are losing all the gains we gained with the ~fast-exp~ procedure, and ending up with a slower algorithm.
