@@ -16,7 +16,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-110][Exercise 1.10]]
 - [[#exercise-111][Exercise 1.11]]
 - [[#exercise-112][Exercise 1.12]]
-- [[#exercixe-114][Exercixe 1.14]]
+- [[#exercise-114][Exercise 1.14]]
 - [[#exercise-115][Exercise 1.15]]
 - [[#exercise-116][Exercise 1.16]]
 - [[#exercise-117][Exercise 1.17]]
@@ -30,6 +30,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-123][Exercise 1.23]]
 - [[#exercise-124][Exercise 1.24]]
 - [[#exercise-125][Exercise 1.25]]
+- [[#exercise-126][Exercise 1.26]]
+- [[#exercise-128][Exercise 1.28]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -527,7 +529,7 @@ Row and column are 0-indexed.
 : 252
 
 TODO. This process is tree-recursive. Can we make it linear iterative?
-* Exercixe 1.14
+* Exercise 1.14
 
 Let's plot the time it takes it to execute the recursive algorithm versus a range of amounts. This will give us a proxy for the order of growth of the steps:
 
@@ -1026,3 +1028,63 @@ Let's start by pointing out an important property of modular arithmetic, which ~
 When using this property to implement expmod, we end up having remainder operations where the divided < divisor, which is computationally fast to do, O(1) per remainder operation.
 
 In contrast we have Alyssa's procedure. This procedure will compute the exponential in logarithmic time, no issue there. But then we need to calculate the reminder of a *very* large number. This is computationally expensive. This bound seems to be O(n log q) ([[https://cs.stackexchange.com/questions/12931/complexity-of-taking-mod][StackExchange]]), so we are losing all the gains we gained with the ~fast-exp~ procedure, and ending up with a slower algorithm.
+* Exercise 1.26
+When we use the original ~expmod~ with square, we hare halving the number of steps every time we encounter an even exponent, hence the logarithmic growth.
+
+If we use the modified ~expmod~ procedure, now we have a precedure that halves the number of steps in when it encounters an even exponent, *but* generates a tree recursion, generating 2 procedure calls every time that happens. We end up having a O(n) growth at the end.
+* Exercise 1.28
+
+Proof: https://kconrad.math.uconn.edu/blurbs/ugradnumthy/millerrabin.pdf
+
+#+BEGIN_SRC scheme :results output
+
+  (define (square a)
+    (* a a))
+
+  (define (expmod base exp m)
+    (define (signal-non-trivial-root number m)
+      (cond ((= number 1) (remainder (square number) m))
+            ((= number (- m 1)) (remainder (square number) m))
+            ((= (remainder (square number) m) 1) 0)
+            (else (remainder (square number) m))))
+    (cond ((= exp 0) 1)
+          ((even? exp)
+           (signal-non-trivial-root (expmod base (/ exp 2) m) m))
+          (else
+           (remainder (* base (expmod base (- exp 1) m))
+                      m))))
+
+  (define (miller-rabin-test n)
+    (define (try-it a)
+      (= (expmod a (- n 1) n) 1))
+    (try-it (+ 1 (random (- n 1)))))
+
+  (define (fast-prime? n times)
+    (cond ((= times 0) true)
+          ((miller-rabin-test n) (fast-prime? n (- times 1)))
+          (else false)))
+
+(fast-prime? 199 100)
+(display "\n")
+;; true
+(display (fast-prime? 1999 100))
+(display "\n")
+;; false
+(display (fast-prime? 19999 100))
+(display "\n")
+;; true
+(display (fast-prime? 5431 100))
+(display "\n")
+;; false
+(display (fast-prime? 5433 100))
+(display "\n")
+;; false, carmichael number
+(display (fast-prime? 118901521 100))
+(display "\n")
+;; false, carmichael number
+(display (fast-prime? 8241 100))
+(display "\n")
+#+END_SRC
+
+#+RESULTS:
+
