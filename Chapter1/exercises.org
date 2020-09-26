@@ -32,6 +32,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-125][Exercise 1.25]]
 - [[#exercise-126][Exercise 1.26]]
 - [[#exercise-128][Exercise 1.28]]
+- [[#exercise-129][Exercise 1.29]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -1087,4 +1088,52 @@ Proof: https://kconrad.math.uconn.edu/blurbs/ugradnumthy/millerrabin.pdf
 #+END_SRC
 
 #+RESULTS:
+* Exercise 1.29
+#+BEGIN_SRC scheme :results output
+  (define (even? num)
+    (= (remainder num 2) 0))
 
+  (define (sum term a next b)
+    (if (> a b)
+        0
+        (+ (term a)
+           (sum term (next a) next b))))
+
+  (define (simpson-integral f a b n)
+    (define (h)
+      (/ (- b a) n))
+
+    (define (factor i)
+      (if (even? i)
+          2
+          4))
+
+    (define (inc numb)
+      (+ numb 1))
+
+    (define (y k)
+      (* (factor k)
+         (f (+ a
+               (* k (h))))))
+
+    (* (/ (h) 3)
+       (+ (/ (y 0) 2)
+          (sum y 1 inc n))))
+
+  (define (cube n)
+    (* n n n))
+
+  (display (simpson-integral cube 0.0 1 100))
+  (display "\n")
+  (display (simpson-integral cube 0.0 1 1000))
+  (display "\n")
+#+END_SRC
+
+#+RESULTS:
+: 0.25333333333333324
+: 0.2503333333333336
+
+
+Real value is 0.25 and we get:
+- 0.25333333333333324 for n = 100
+- 0.2503333333333336 for n =1000
