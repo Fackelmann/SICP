@@ -1087,8 +1087,10 @@ Proof: https://kconrad.math.uconn.edu/blurbs/ugradnumthy/millerrabin.pdf
 (display "\n")
 #+END_SRC
 
-#+RESULTS:
+
 * Exercise 1.29
+
+Implement Simpson's Rule: 
 
 #+BEGIN_SRC scheme :results output
   (define (even? num)
