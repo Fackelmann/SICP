@@ -34,6 +34,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-128][Exercise 1.28]]
 - [[#exercise-129][Exercise 1.29]]
 - [[#exercise-130][Exercise 1.30]]
+- [[#exercise-131][Exercise 1.31]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -1161,8 +1162,70 @@ Real value is 0.25 and we get:
 
   (define (inc n) (+ n 1))
 
+  (define (cube n)
+    (* n n n))
+
   (define (sum-cubes a b)
     (sum cube a inc b))
 
   (sum-cubes 1 10)
 #+END_SRC
+
+#+RESULTS:
+: 3025
+
+* Exercise 1.31
+
+Recursive process
+#+BEGIN_SRC scheme :results output
+  (define (product term a next b)
+    (if (> a b)
+        1
+        (* (term a)
+           (product term (next a) next b))))
+
+  (define (identity a)
+    a)
+
+  (define (inc a)
+    (+ 1 a))
+
+  (define (factorial a)
+    (product identity 1 inc a))
+
+  (display (factorial 4))
+  (display "\n")
+  (display (factorial 7))
+#+END_SRC
+
+#+RESULTS:
+: 24
+: 5040
+
+Linear process
+#+BEGIN_SRC scheme :results output
+  (define (product term a next b)
+    (define (iter a result)
+      (if (> a b)
+          result
+          (iter (next a)
+                (* (term a) result))))
+      (iter a 1))
+
+  (define (identity a)
+    a)
+
+  (define (inc a)
+    (+ 1 a))
+
+  (define (factorial a)
+    (product identity 1 inc a))
+
+  (display (factorial 4))
+  (display "\n")
+  (display (factorial 7))
+#+END_SRC
+
+#+RESULTS:
+: 24
+: 5040
