@@ -35,6 +35,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-129][Exercise 1.29]]
 - [[#exercise-130][Exercise 1.30]]
 - [[#exercise-131][Exercise 1.31]]
+- [[#exercise-132][Exercise 1.32]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -1229,3 +1230,75 @@ Linear process
 #+RESULTS:
 : 24
 : 5040
+
+* Exercise 1.32
+
+I'm only doing the iterative version here. The linear recursive version is trivial.
+#+BEGIN_SRC scheme :results output
+
+  (define (accumulate combiner null-value term a next b)
+    (define (iter a result)
+      (if (> a b)
+          result
+          (iter (next a)
+                (combiner (term a) result))))
+    (iter a null-value))
+
+  (define (product term a next b)
+    (accumulate * 1 term a next b))
+
+  (define (sum term a next b)
+    (accumulate + 0 term a next b))
+
+
+  (define (identity a)
+    a)
+
+  (define (inc a)
+    (+ 1 a))
+
+  (define (factorial a)
+    (product identity 1 inc a))
+
+  (define (cube n)
+    (* n n n))
+
+  (define (simpson-integral f a b n)
+    (define (h)
+      (/ (- b a) n))
+
+    (define (factor i)
+      (if (even? i)
+          2
+          4))
+
+    (define (inc numb)
+      (+ numb 1))
+
+    (define (y k)
+      (* (factor k)
+         (f (+ a
+               (* k (h))))))
+
+    (* (/ (h) 3)
+       (+ (/ (y 0) 2)
+          (sum y 1 inc n))))
+
+  (display "Factorial\n")
+  (display (factorial 4))
+  (display "\n")
+  (display (factorial 7))
+  (display "\nSimpsons integral\n")
+  (display (simpson-integral cube 0.0 1 100))
+  (display "\n")
+  (display (simpson-integral cube 0.0 1 1000))
+  (display "\n")
+#+END_SRC
+
+#+RESULTS:
+: Factorial
+: 24
+: 5040
+: Simpsons integral
+: 0.2533333333333334
+: 0.25033333333333335
