@@ -42,6 +42,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-136][Exercise 1.36]]
 - [[#exercise-137][Exercise 1.37]]
 - [[#exercise-138][Exercise 1.38]]
+- [[#exercise-139][Exercise 1.39]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -1505,4 +1506,49 @@ k=13 for an approximation accurate to 4 decimal places.
 : 2.718281828735696
 
 With 13 iterations we have the following value = ~2.718281828735696~
+* Exercise 1.39
+#+BEGIN_SRC scheme :results output
+  (define (cont-frac n d k)
+    (define (iter-helper n d k acc)
+      (cond ((= k 0)
+             acc)
+            (else
+             (iter-helper n
+                          d
+                          (- k 1)
+                          (/ (n k)
+                             (+ (d k)
+                                acc))))))
+    (iter-helper n d k 0))
 
+  (define (tan-cf x k)
+    (cont-frac (lambda (i) (if (= i 1)
+                                  x
+                                  (* -1 x x)))
+                  (lambda (i) (- (* i 2) 1))
+                  k))
+
+  (display (tan-cf 2.1 13))
+  (display "\n")
+  (display (tan-cf 0.7 13))
+  (display "\n")
+  (display (tan-cf 3.0 13))
+  (display "\n")
+  (display (tan-cf 6.0 13))
+  (display "\n")
+  (display (tan-cf 1.85 13))
+#+END_SRC
+
+#+RESULTS:
+: -1.7098465429045078
+: 0.8422883804630793
+: -0.14254654307428116
+: -0.2910063570936915
+: -3.4880595886523134
+
+Results:
+- tan(2.1) = -1.7098465429045078
+- tan(0.7) = 0.8422883804630793
+- tan(3) = -0.14254654307428116
+- tan(6) = -0.2910063570936915
+- tan(1.85) = -3.4880595886523134
