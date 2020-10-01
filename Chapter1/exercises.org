@@ -41,6 +41,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-135][Exercise 1.35]]
 - [[#exercise-136][Exercise 1.36]]
 - [[#exercise-137][Exercise 1.37]]
+- [[#exercise-138][Exercise 1.38]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -1470,3 +1471,38 @@ With damping
 
 
 k=13 for an approximation accurate to 4 decimal places.
+* Exercise 1.38
+
+#+BEGIN_SRC scheme
+  (define (cont-frac n d k)
+    (define (iter-helper n d k acc)
+      (cond ((= k 0)
+             acc)
+            (else
+             (iter-helper n
+                          d
+                          (- k 1)
+                          (/ (n k)
+                             (+ (d k)
+                                acc))))))
+    (iter-helper n d k 0))
+
+  (define (calculate-e k)
+    (define (d i)
+      (let ((j (+ i 1)))
+        (if (= (remainder j 3) 0)
+            (* (/ j 3) 2)
+            1)))
+    (+ (cont-frac (lambda (i) 1)
+                  d
+                  k)
+       2))
+
+  (calculate-e 13.0)
+#+END_SRC
+
+#+RESULTS:
+: 2.718281828735696
+
+With 13 iterations we have the following value = ~2.718281828735696~
+
