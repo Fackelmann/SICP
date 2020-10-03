@@ -47,6 +47,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-141][Exercise 1.41]]
 - [[#exercise-142][Exercise 1.42]]
 - [[#exercise-143][Exercise 1.43]]
+- [[#exercise-144][Exercise 1.44]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -1642,3 +1643,35 @@ Results:
 
 #+RESULTS:
 : 625
+* Exercise 1.44
+#+BEGIN_SRC scheme
+  (define dx 0.00001)
+
+  (define (compose proc1 proc2)
+    (lambda (x) (proc1 (proc2 x))))
+
+  (define (repeated proc n)
+    (if (= n 0)
+        (lambda (x) x)
+        (compose proc (repeated proc (- n 1)))))
+
+  (define (smooth f)
+    (lambda (x)
+      (/ (+ (f (- x dx))
+            (f x)
+            (f (+ x dx)))
+         3)))
+
+  (define (nsmooth n)
+    (repeated smooth n))
+
+  (define (square x)
+    (* x x))
+
+  ((smooth sin) 5)
+  (((nsmooth 10) sin) 5)
+#+END_SRC
+
+#+RESULTS:
+: -0.9589242743434969
+
