@@ -44,6 +44,9 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-138][Exercise 1.38]]
 - [[#exercise-139][Exercise 1.39]]
 - [[#exercise-140][Exercise 1.40]]
+- [[#exercise-141][Exercise 1.41]]
+- [[#exercise-142][Exercise 1.42]]
+- [[#exercise-143][Exercise 1.43]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -1595,4 +1598,47 @@ Results:
 : 
 : -1.9999999999999756
 : -6.8906798806739005
+* Exercise 1.41
+#+BEGIN_SRC scheme
+  (define (inc x)
+    (+ x 1))
 
+  (define (double proc)
+    (lambda (x) (proc (proc x))))
+
+  (((double (double double)) inc) 5)
+#+END_SRC
+
+#+RESULTS:
+: 21
+* Exercise 1.42
+#+BEGIN_SRC scheme
+  (define (inc x)
+    (+ x 1))
+  (define (square x)
+    (* x x))
+  (define (compose proc1 proc2)
+    (lambda (x) (proc1 (proc2 x))))
+  ((compose square inc) 6)
+#+END_SRC
+
+#+RESULTS:
+: 49
+* Exercise 1.43
+#+BEGIN_SRC scheme
+  (define (square x)
+    (* x x))
+
+  (define (compose proc1 proc2)
+    (lambda (x) (proc1 (proc2 x))))
+
+  (define (repeated proc n)
+    (if (= n 0)
+        (lambda (x) x)
+        (compose proc (repeated proc (- n 1)))))
+
+  ((repeated square 2) 5)
+#+END_SRC
+
+#+RESULTS:
+: 625
