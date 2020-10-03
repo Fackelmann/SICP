@@ -49,6 +49,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-143][Exercise 1.43]]
 - [[#exercise-144][Exercise 1.44]]
 - [[#exercise-145][Exercise 1.45]]
+- [[#exercise-146][Exercise 1.46]]
 
 * Exercise 1.1
 #+BEGIN_SRC scheme
@@ -1742,4 +1743,43 @@ Results:
 : 1.0057888501786743
 
 The number of damps seems to follow floor(log_2 n)
+* Exercise 1.46
+Write a procedure `iterative-improve'
+     that takes two procedures as arguments: a method for telling
+     whether a guess is good enough and a method for improving a guess.
+     `Iterative-improve' should return as its value a procedure that
+     takes a guess as argument and keeps improving the guess until it
+     is good enough.  Rewrite the `sqrt' procedure of section *Note
+     1-1-7:: and the `fixed-point' procedure of section *Note 1-3-3::
+     in terms of `iterative-improve'.
+
+#+BEGIN_SRC scheme
+  (define (improve guess x)
+    (average guess (/ x guess)))
+
+  (define (average x y)
+    (/ (+ x y) 2))
+
+  (define (square x)
+    (* x x))
+  (define (good-enough? guess x)
+    (< (abs (- (square guess) x)) 0.001))
+
+  (define (iterative-improve p-good-enough p-improve)
+    (define (iter-proc guess x)
+      (if (p-good-enough guess x)
+          guess
+          (iter-proc (p-improve guess x)
+                     x)))
+    iter-proc)
+
+  (define (sqrt guess x)
+    ((iterative-improve good-enough? improve) guess x))
+
+  (sqrt 1 2.0)
+
+#+END_SRC
+
+#+RESULTS:
+: 1.4142156862745097
 
