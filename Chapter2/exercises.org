@@ -1,0 +1,62 @@
+#+PROPERTY: header-args    :exports both
+This is an org-mode file with ~scheme~ code blocks. If you clone this repo you can execute each block inside this file with ~C-c C-c~.
+
+Because of some mysterious reason, results don't show up in the rendered github file. You can see them by opening the raw file.
+
+* Table of Contents :TOC:
+- [[#common][Common]]
+- [[#exercise-21][Exercise 2.1]]
+
+* Common
+
+Defining commong functions here, so we don't need to repeat them over all the code blocks. 
+#+NAME: common_block
+#+BEGIN_SRC scheme
+  (define (square x)
+    (* x x))
+
+  (define (gcd a b)
+    (if (= b 0)
+        a
+        (gcd b (remainder a b))))
+#+END_SRC
+
+
+* Exercise 2.1
+#+BEGIN_SRC scheme :noweb yes :results output
+  <<common_block>>
+  (define (numer x) (car x))
+
+  (define (denom x) (cdr x))
+
+  (define (print-rat x)
+    (display "\n")
+    (display (numer x))
+    (display "/")
+    (display (denom x)))
+
+  (define (make-rat n d)
+    (define (is-positive? n d)
+      (cond ((and (> n 0) (< d 0))
+             -1)
+            ((and (< n 0) (> d 0))
+             -1)
+            (else
+             1)))
+    (let ((g (gcd n d))
+          (sign (is-positive? n d)))
+      (cons (* sign (/ n g)) (* sign (/ d g)))))
+
+  (print-rat (make-rat 3 -6))
+  (print-rat (make-rat -3 6))
+  (print-rat (make-rat -3 -6))
+  (print-rat (make-rat 3 6))
+
+#+END_SRC
+
+#+RESULTS:
+: 
+: -1/2
+: -1/2
+: 1/2
+: 1/2
