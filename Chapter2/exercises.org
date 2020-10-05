@@ -6,6 +6,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 * Table of Contents :TOC:
 - [[#common][Common]]
 - [[#exercise-21][Exercise 2.1]]
+- [[#exercise-12][Exercise 1.2]]
 
 * Common
 
@@ -60,3 +61,55 @@ Defining commong functions here, so we don't need to repeat them over all the co
 : -1/2
 : 1/2
 : 1/2
+
+* Exercise 1.2
+
+#+BEGIN_SRC scheme :results output
+  (define (make-segment start end)
+    (cons start end))
+
+  (define (start-segment segment)
+    (car segment))
+
+  (define (end-segment segment)
+    (cdr segment))
+
+  (define (make-point x y)
+    (cons x y))
+
+  (define (x-point point)
+    (car point))
+
+  (define (y-point point)
+    (cdr point))
+
+  (define (print-point p)
+    (display "\n")
+    (display "(")
+    (display (x-point p))
+    (display ",")
+    (display (y-point p))
+    (display ")"))
+
+  (define (midpoint-segment segment)
+    (let ((start (start-segment segment))
+          (end (end-segment segment)))
+      (let ((midx (/ (+ (x-point start)
+                        (x-point end))
+                     2))
+            (midy (/ (+ (y-point start)
+                        (y-point end))
+                     2)))
+        (make-point midx midy))))
+
+  (define my-segment (make-segment (make-point 1 1)
+                                   (make-point 2 2)))
+
+  (define midpoint (midpoint-segment my-segment))
+
+  (print-point midpoint)
+#+END_SRC
+
+#+RESULTS:
+: 
+: (3/2,3/2)
