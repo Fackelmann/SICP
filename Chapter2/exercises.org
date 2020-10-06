@@ -6,7 +6,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 * Table of Contents :TOC:
 - [[#common][Common]]
 - [[#exercise-21][Exercise 2.1]]
-- [[#exercise-12][Exercise 1.2]]
+- [[#exercise-22][Exercise 2.2]]
+- [[#exercise-23][Exercise 2.3]]
 
 * Common
 
@@ -62,8 +63,9 @@ Defining commong functions here, so we don't need to repeat them over all the co
 : 1/2
 : 1/2
 
-* Exercise 1.2
+* Exercise 2.2
 
+#+NAME: ex_2.2
 #+BEGIN_SRC scheme :results output
   (define (make-segment start end)
     (cons start end))
@@ -107,9 +109,51 @@ Defining commong functions here, so we don't need to repeat them over all the co
 
   (define midpoint (midpoint-segment my-segment))
 
-  (print-point midpoint)
+;;  (print-point midpoint)
 #+END_SRC
 
 #+RESULTS:
 : 
 : (3/2,3/2)
+
+* Exercise 2.3
+
+#+BEGIN_SRC scheme :noweb yes :results output
+  <<ex_2.2>>
+  ;; Implement rectangles with sides parallel to the axis for now
+  ;; Generalizing it adds complexity without addin much value (IMO) to this exercise
+  (define (rectangle lower_left upper_right)
+    (cons lower_left upper_right))
+
+  (define (rect-ll rectangle)
+    (car rectangle))
+
+  (define (rect-ur rectangle)
+    (cdr rectangle))
+
+  (define (rect-perimeter rectangle)
+    (* (+ (- (x-point (rect-ur rectangle))
+             (x-point (rect-ll rectangle)))
+          (- (y-point (rect-ur rectangle))
+             (y-point (rect-ll rectangle))))
+       2))
+
+  (define (rect-area rectangle)
+    (* (- (x-point (rect-ur rectangle))
+          (x-point (rect-ll rectangle)))
+       (- (y-point (rect-ur rectangle))
+          (y-point (rect-ll rectangle)))))
+
+  (define my-rectangle (rectangle (make-point 1 0)
+                                  (make-point 10 2)))
+
+  (display "\n")
+  (display (rect-perimeter my-rectangle))
+  (display "\n")
+  (display (rect-area my-rectangle))
+#+END_SRC
+
+#+RESULTS:
+: 
+: 22
+: 18
