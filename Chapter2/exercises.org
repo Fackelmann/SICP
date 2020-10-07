@@ -165,7 +165,7 @@ Check that it works as expected:
 (car (cons 3 2))
 (car (lambda (m) (m 3 2)))
 ((lambda (p q) p) 3 2)
-2
+3
 #+END_SRC
 
 And ~cdr~ implementation:
