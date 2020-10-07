@@ -8,6 +8,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-21][Exercise 2.1]]
 - [[#exercise-22][Exercise 2.2]]
 - [[#exercise-23][Exercise 2.3]]
+- [[#exercise-24][Exercise 2.4]]
 
 * Common
 
@@ -157,3 +158,18 @@ Defining commong functions here, so we don't need to repeat them over all the co
 : 
 : 22
 : 18
+
+* Exercise 2.4
+Check that it works as expected:
+#+BEGIN_SRC scheme
+(car (cons 3 2))
+(car (lambda (m) (m 3 2)))
+((lambda (p q) p) 3 2)
+2
+#+END_SRC
+
+And ~cdr~ implementation:
+#+BEGIN_SRC scheme
+  (define (cdr z)
+    (z (lambda (p q) q)))
+#+END_SRC
