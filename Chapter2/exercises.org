@@ -9,6 +9,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-22][Exercise 2.2]]
 - [[#exercise-23][Exercise 2.3]]
 - [[#exercise-24][Exercise 2.4]]
+- [[#exercise-25][Exercise 2.5]]
 
 * Common
 
@@ -22,6 +23,11 @@ Defining commong functions here, so we don't need to repeat them over all the co
     (if (= b 0)
         a
         (gcd b (remainder a b))))
+
+  (define (power x n)
+    (if (= n 0)
+        1
+        (* x (power x (- n 1)))))
 #+END_SRC
 
 
@@ -173,3 +179,59 @@ And ~cdr~ implementation:
   (define (cdr z)
     (z (lambda (p q) q)))
 #+END_SRC
+
+* Exercise 2.5
+
+#+BEGIN_SRC scheme :noweb yes :results output
+  <<common_block>>
+  (define (cons a b)
+    (* (power 2 a)
+       (power 3 b)))
+
+  (define (max-exponent n a)
+    (if (= 0 (remainder n a))
+        (+ 1 (max-exponent (/ n a)  a))
+        0))
+
+  (define (car z)
+    (max-exponent z 2))
+
+  (define (cdr z)
+    (max-exponent z 3))
+
+  ;; Test
+  ;; It seems that Guile doesn't suppor assert
+  ;; strange
+  ;; (let ((list (cons 5 7)))
+  ;;   (assert (= (car list) 5))
+  ;;   (assert (= (cdr list) 7)))
+
+  ;; Test
+
+  (let ((list (cons 5 7)))
+    (display "\n")
+    (display (= (car list) 5))
+    (display "\n")
+    (display (= (cdr list) 7)))
+
+  (let ((list (cons 127 1)))
+    (display "\n")
+    (display (= (car list) 127))
+    (display "\n")
+    (display (= (cdr list) 1)))
+
+  (let ((list (cons 21 32)))
+    (display "\n")
+    (display (= (car list) 21))
+    (display "\n")
+    (display (= (cdr list) 32)))
+#+END_SRC
+
+#+RESULTS:
+: 
+: #t
+: #t
+: #t
+: #t
+: #t
+: #t
