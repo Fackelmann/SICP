@@ -10,6 +10,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-23][Exercise 2.3]]
 - [[#exercise-24][Exercise 2.4]]
 - [[#exercise-25][Exercise 2.5]]
+- [[#exercise-26][Exercise 2.6]]
 
 * Common
 
@@ -235,3 +236,38 @@ And ~cdr~ implementation:
 : #t
 : #t
 : #t
+
+* Exercise 2.6
+
+Let's start by evaluating ~(add-1 zero)~
+#+BEGIN_SRC scheme
+(add-1 zero)
+(lambda (f) (lambda (x) (f ((zero f) x))))
+#+END_SRC
+
+And evaluating ~(zero f)~
+
+#+BEGIN_SRC scheme
+(zero f)
+(lambda (f) (lambda (x) x))
+(lambda (x) x)
+#+END_SRC
+
+Substituting:
+
+#+BEGIN_SRC scheme
+(lambda (f) (lambda (x) (f x)))
+#+END_SRC
+
+So one is:
+#+BEGIN_SRC scheme
+(define one (lambda (f) (lambda (x) (f x))))
+#+END_SRC
+
+Similarly if we evaluate ~(add-1 1)~, the number two will be:
+
+#+BEGIN_SRC scheme
+(define two (lambda (f) (lambda (x) (f (f x)))))
+#+END_SRC
+
+We can see that a number N is defined by a lambda expression in which a lambda function is applied N times to another lambda expression.
