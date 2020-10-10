@@ -11,6 +11,9 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-24][Exercise 2.4]]
 - [[#exercise-25][Exercise 2.5]]
 - [[#exercise-26][Exercise 2.6]]
+- [[#exercise-27][Exercise 2.7]]
+- [[#exercise-28][Exercise 2.8]]
+- [[#exercise-29][Exercise 2.9]]
 
 * Common
 
@@ -271,3 +274,91 @@ Similarly if we evaluate ~(add-1 1)~, the number two will be:
 #+END_SRC
 
 We can see that a number N is defined by a lambda expression in which a lambda function is applied N times to another lambda expression.
+
+* Exercise 2.7
+#+NAME: ex_2.7
+#+BEGIN_SRC scheme
+  (define (make-interval a b)
+    (cons a b))
+
+  (define (upper-bound interval)
+    (cdr interval))
+
+  (define (lower-bound interval)
+    (car interval))
+
+  (define (add-interval x y)
+    (make-interval (+ (lower-bound x) (lower-bound y))
+                   (+ (upper-bound x) (upper-bound y))))
+
+  (define (mul-interval x y)
+    (let ((p1 (* (lower-bound x) (lower-bound y)))
+          (p2 (* (lower-bound x) (upper-bound y)))
+          (p3 (* (upper-bound x) (lower-bound y)))
+          (p4 (* (upper-bound x) (upper-bound y))))
+      (make-interval (min p1 p2 p3 p4)
+                     (max p1 p2 p3 p4))))
+
+  (define (div-interval x y)
+    (mul-interval x
+                  (make-interval (/ 1.0 (upper-bound y))
+                                 (/ 1.0 (lower-bound y)))))
+#+END_SRC
+
+#+RESULTS: ex_2.7
+: #<unspecified>
+
+* Exercise 2.8
+
+#+BEGIN_SRC scheme :noweb yes :results output
+  <<ex_2.7>>
+  (define (sub-interval x y)
+    (make-interval (- (lower-bound x) (upper-bound y))
+                   (- (upper-bound x) (lower-bound y))))
+
+  (display (sub-interval (make-interval 3 4)
+                         (make-interval 0 2)))
+#+END_SRC
+
+#+RESULTS:
+: (1 . 4)
+
+* Exercise 2.9
+
+In the case of addition and substraction, let's say we have two intervals: ~[x1, x2], [y1, y2]~
+
+#+BEGIN_SRC
+z = x + y = [x1+y1, x2+y2]
+z2-z1 = x2-x1 + y2-y1 = width 1 + width 2
+
+z = x - y = [x1-y2, x2-y1]
+z2-z1 = x2-x1 + y2-y1 = width 1 + width 2
+#+END_SRC
+
+If it were a function of only the widths for multiplication and division, we would expect the resulting width to be the same for operations with same width input. We see that's not the case.
+
+#+BEGIN_SRC scheme :noweb yes :results output
+  <<ex_2.7>>
+
+  (display "Mult\n")
+  (display (mul-interval (make-interval 0 3)
+                         (make-interval 2 7)))
+  (display "\n")
+  (display (mul-interval (make-interval 10 13)
+                         (make-interval 0 5)))
+  (display "\n")
+  (display "Div\n")
+  (display (div-interval (make-interval 1 3)
+                         (make-interval 2 7)))
+  (display "\n")
+  (display (div-interval (make-interval 10 12)
+                         (make-interval 1 6)))
+#+END_SRC
+
+#+RESULTS:
+: Mult
+: (0 . 21)
+: (0 . 65)
+: Div
+: (0.14285714285714285 . 1.5)
+: (1.6666666666666665 . 12.0)
