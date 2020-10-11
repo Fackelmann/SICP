@@ -414,7 +414,7 @@ We can construct a table with all the different possibilities. Here 0 means >= 0
 |  1 |  1 |  1 |  0 |
 |  1 |  1 |  1 |  1 |
 
-But we have 16 cases, not 9 as Ben suggested. If we assume that the lower upper of an interval is less than the upper bound (which we have been doing so far), we can eliminate some of this cases, ending up with 9:
+But we have 16 cases, not 9 as Ben suggested. If we assume that the lower bound of an interval is less than the upper bound (which we have been doing so far), we can eliminate some of this cases, ending up with 9:
 
 | xl | xh | yl | yh |
 |----+----+----+----|
