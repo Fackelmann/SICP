@@ -16,6 +16,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-29][Exercise 2.9]]
 - [[#exercise-210][Exercise 2.10]]
 - [[#exercise-211][Exercise 2.11]]
+- [[#exercise-212][Exercise 2.12]]
 
 * Common
 
@@ -496,3 +497,24 @@ In this case need to test two different results for the lower bound, and the upp
 
 #+RESULTS:
 : (-20 . 30)
+
+* Exercise 2.12
+#+NAME: ex_2.12
+#+BEGIN_SRC scheme :noweb yes
+  <<ex_2.7>>
+  (define (make-center-width c w)
+    (make-interval (- c w) (+ c w)))
+
+  (define (center i)
+    (/ (+ (lower-bound i) (upper-bound i)) 2))
+
+  (define (width i)
+    (/ (- (upper-bound i) (lower-bound i)) 2))
+
+  (define (make-center-percent c t)
+    (make-interval (* c (- 1 (/ t 100)))
+                   (* c (+ 1 (/ t 100)))))
+
+  (define (percent i)
+    (* (/ (width i) (center i)) 100))
+#+END_SRC
