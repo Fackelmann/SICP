@@ -17,6 +17,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-210][Exercise 2.10]]
 - [[#exercise-211][Exercise 2.11]]
 - [[#exercise-212][Exercise 2.12]]
+- [[#exercise-217][Exercise 2.17]]
 
 * Common
 
@@ -518,3 +519,16 @@ In this case need to test two different results for the lower bound, and the upp
   (define (percent i)
     (* (/ (width i) (center i)) 100))
 #+END_SRC
+
+* Exercise 2.17
+#+BEGIN_SRC scheme
+  (define (last-pair list)
+    (if (null? (cdr list))
+        (car list)
+        (last-pair (cdr list))))
+
+  (last-pair (list 23 72 149 34))
+#+END_SRC
+
+#+RESULTS:
+: 34
