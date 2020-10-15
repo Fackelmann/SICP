@@ -18,6 +18,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-211][Exercise 2.11]]
 - [[#exercise-212][Exercise 2.12]]
 - [[#exercise-217][Exercise 2.17]]
+- [[#exercise-218][Exercise 2.18]]
 
 * Common
 
@@ -532,3 +533,18 @@ In this case need to test two different results for the lower bound, and the upp
 
 #+RESULTS:
 : 34
+
+* Exercise 2.18
+
+#+BEGIN_SRC scheme 
+    (define (reverse items)
+      (if (null? items)
+          items
+          (append (reverse (cdr items)) 
+                  (list (car items)))))
+
+  (reverse (list 1 4 9 16 25))
+#+END_SRC
+
+#+RESULTS:
+| 25 | 16 | 9 | 4 | 1 |
