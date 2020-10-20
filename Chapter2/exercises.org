@@ -20,6 +20,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-217][Exercise 2.17]]
 - [[#exercise-218][Exercise 2.18]]
 - [[#exercise-219][Exercise 2.19]]
+- [[#exercise-220][Exercise 2.20]]
 
 * Common
 
@@ -587,3 +588,25 @@ In this case need to test two different results for the lower bound, and the upp
 #+RESULTS:
 : 292
 
+* Exercise 2.20
+#+BEGIN_SRC scheme
+  (define (same-parity . input)
+    (define (same-parity-helper parity result input)
+      (cond ((null? input)
+             result)
+            ((= (remainder (car input) 2) parity)
+             (same-parity-helper parity
+                                 (append result (list (car input)))
+                                 (cdr input)))
+            ((same-parity-helper parity
+                                 result
+                                 (cdr input)))))
+
+    (same-parity-helper (remainder (car input) 2)
+                        (list (car input))
+                        (cdr input)))
+  (same-parity 2 3 4 5 6 7 10)
+#+END_SRC
+
+#+RESULTS:
+| 2 | 4 | 6 | 10 |
