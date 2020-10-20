@@ -21,6 +21,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-218][Exercise 2.18]]
 - [[#exercise-219][Exercise 2.19]]
 - [[#exercise-220][Exercise 2.20]]
+- [[#exercise-221][Exercise 2.21]]
 
 * Common
 
@@ -610,3 +611,29 @@ In this case need to test two different results for the lower bound, and the upp
 
 #+RESULTS:
 | 2 | 4 | 6 | 10 |
+
+* Exercise 2.21
+
+Without map:
+#+BEGIN_SRC scheme
+  (define (square-list items)
+    (if (null? items)
+        '()
+        (cons (* (car items) (car items))
+              (square-list (cdr items)))))
+  (square-list (list 1 2 3 4))
+#+END_SRC
+
+#+RESULTS:
+| 1 | 4 | 9 | 16 |
+
+With map:
+#+BEGIN_SRC scheme
+  (define (square-list items)
+    (map (lambda (x) (* x x))
+         items))
+  (square-list (list 1 2 3 4))
+#+END_SRC
+
+#+RESULTS:
+| 1 | 4 | 9 | 16 |
