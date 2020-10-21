@@ -22,6 +22,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-219][Exercise 2.19]]
 - [[#exercise-220][Exercise 2.20]]
 - [[#exercise-221][Exercise 2.21]]
+- [[#exercise-222][Exercise 2.22]]
 
 * Common
 
@@ -637,3 +638,33 @@ With map:
 
 #+RESULTS:
 | 1 | 4 | 9 | 16 |
+
+* Exercise 2.22
+
+The first implementation produces the answer in the reversed order becasue we keep are adding the square car of the list and adding it to the answer, and then iterating over the cdr of the list.
+
+#+BEGIN_SRC scheme
+  (define (square x)
+    (* x x))
+  (define (square-list items)
+    (define (iter things answer)
+      (if (null? things)
+          answer
+          (iter (cdr things)
+                (cons answer
+                      (square (car things))))))
+    (iter items '()))
+    (square-list (list 1 2 3 4))
+#+END_SRC
+
+This will produce:
+((((() . 1) . 4) . 9) . 16)
+
+The reason is that now with cons we are not construction a correct list.
+In the first iteration we create a pair ('() . 1). Then we make this the first element of the next pair, (('() . 1) . 4), and so on.
+This construction has the form:
+
+(cons (cons (cons nil 1) 4) 9)...
+
+When a correct list has the form (abbreviated to 9 elements):
+(cons 1 (cons 4 (cons 9 nil))) 
