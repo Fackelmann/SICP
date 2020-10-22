@@ -23,6 +23,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-220][Exercise 2.20]]
 - [[#exercise-221][Exercise 2.21]]
 - [[#exercise-222][Exercise 2.22]]
+- [[#exercise-223][Exercise 2.23]]
 
 * Common
 
@@ -668,3 +669,22 @@ This construction has the form:
 
 When a correct list has the form (abbreviated to 9 elements):
 (cons 1 (cons 4 (cons 9 nil))) 
+
+* Exercise 2.23
+
+#+BEGIN_SRC scheme :results output
+  (define (for-each proc items)
+    (cond ((null? items)
+           #t)
+          ((proc (car items))
+           (for-each proc (cdr items)))))
+
+  (for-each (lambda (x) (display "\n") (display x))
+            (list 57 321 88))
+#+END_SRC
+
+#+RESULTS:
+: 
+: 57
+: 321
+: 88
