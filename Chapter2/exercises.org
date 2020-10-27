@@ -27,6 +27,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-224][Exercise 2.24]]
 - [[#exercise-225][Exercise 2.25]]
 - [[#exercise-226][Exercise 2.26]]
+- [[#exercise-227][Exercise 2.27]]
 
 * Common
 
@@ -757,3 +758,24 @@ Tree structure
 (list x y)
 ((1 2 3) (4 5 6))
 #+END_SRC
+
+* Exercise 2.27
+
+`deep-reverse` is similar to `reverse`, from exercise 2.18. The only difference is that if one of the branches is a tree (this is, a pair), we recursively apply it to those elements as well, to reverse them within the subtree.
+
+#+BEGIN_SRC scheme 
+  (define (deep-reverse items)
+    (cond ((null? items)
+           items)
+          ((pair? (car items))
+           (append (deep-reverse (cdr items)) 
+                   (list (deep-reverse (car items)))))
+          ((append (deep-reverse (cdr items)) 
+                   (list (car items))))))
+
+  (define x (list (list 1 2) (list 3 4) 5 6 ))
+  (deep-reverse x)
+#+END_SRC
+
+#+RESULTS:
+| 6 | 5 | (4 3) | (2 1) |
