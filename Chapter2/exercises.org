@@ -24,6 +24,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-221][Exercise 2.21]]
 - [[#exercise-222][Exercise 2.22]]
 - [[#exercise-223][Exercise 2.23]]
+- [[#exercise-224][Exercise 2.24]]
 
 * Common
 
@@ -688,3 +689,40 @@ When a correct list has the form (abbreviated to 9 elements):
 : 57
 : 321
 : 88
+
+* Exercise 2.24
+Result:
+#+BEGIN_SRC 
+(1 (2 (3 4)))
+#+END_SRC
+
+Box pointer structure
+#+BEGIN_SRC 
+(1 (2 (3 4))
+             +---+---+                  +---+---+     +---+---+
+        ---->| * | *-+----------------->| * | *-+---->| * | / |
+             +---+---+                  +---+---+     +---+---=
+               |                          |             |
+               V                          V             V
+             +---+                      +---+   (3 4) +---+---+    +---+---+
+             | 1 |                      | 2 |     --->| * | *-+--->| * | / |
+             +---+                      +---+         +---+---+    +---+---+
+                                                        |            |
+                                                        V            V
+                                                      +---+        +---+
+                                                      | 3 |        | 4 |
+                                                      +---+        +---+
+#+END_SRC
+
+Tree structure
+#+BEGIN_SRC 
+            (1 (2 (3 4)))
+                /\
+               /  \
+              1  (2 (3 4))
+                   /\
+                  /  \
+                 2  (3 4)
+                     /\
+                    3  4
+#+END_SRC
