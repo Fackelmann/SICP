@@ -26,6 +26,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-223][Exercise 2.23]]
 - [[#exercise-224][Exercise 2.24]]
 - [[#exercise-225][Exercise 2.25]]
+- [[#exercise-226][Exercise 2.26]]
 
 * Common
 
@@ -738,4 +739,21 @@ Tree structure
 
 (define list3 (list 1 (list 2 (list 3 (list 4 (list 5 (list 6 7)))))))
 (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr list3))))))))))))
+#+END_SRC
+
+* Exercise 2.26
+
+#+BEGIN_SRC 
+(append x y)
+(1 2 3 4 5 6)
+#+END_SRC
+
+#+BEGIN_SRC 
+(cons x y)
+((1 2 3) 4 5 6)
+#+END_SRC
+
+#+BEGIN_SRC 
+(list x y)
+((1 2 3) (4 5 6))
 #+END_SRC
