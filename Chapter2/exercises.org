@@ -867,3 +867,5 @@ Tree structure
 #+RESULTS:
 : #f
 : #t
+
+If we changed the constructors from `list` to `cons`, we'd need to change the accesors and the pair? check at the programs. Maybe create a `is-weight?` procedure so we don't depend on the internal representation of the mobile.
