@@ -31,6 +31,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-228][Exercise 2.28]]
 - [[#exercise-229][Exercise 2.29]]
 - [[#exercise-230][Exercise 2.30]]
+- [[#exercise-231][Exercise 2.31]]
 
 * Common
 
@@ -902,6 +903,29 @@ Map implementation:
          (list 2 (list 3 4) 5)
          (list 6 7)))
 
+#+END_SRC
+
+#+RESULTS:
+| 1 | (4 (9 16) 25) | (36 49) |
+
+* Exercise 2.31
+#+BEGIN_SRC scheme
+  (define (square x)
+    (* x x))
+  
+(define (tree-map proc tree)
+    (map (lambda (sub-tree)
+           (if (not (pair? sub-tree))
+               (proc sub-tree)
+               (tree-map proc sub-tree)))
+         tree))
+
+
+  (define (square-tree tree) (tree-map square tree))
+  (square-tree
+   (list 1
+         (list 2 (list 3 4) 5)
+         (list 6 7)))
 #+END_SRC
 
 #+RESULTS:
