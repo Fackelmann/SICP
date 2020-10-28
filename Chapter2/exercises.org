@@ -30,6 +30,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-227][Exercise 2.27]]
 - [[#exercise-228][Exercise 2.28]]
 - [[#exercise-229][Exercise 2.29]]
+- [[#exercise-230][Exercise 2.30]]
 
 * Common
 
@@ -869,3 +870,39 @@ Tree structure
 : #t
 
 If we changed the constructors from `list` to `cons`, we'd need to change the accesors and the pair? check at the programs. Maybe create a `is-weight?` procedure so we don't depend on the internal representation of the mobile.
+
+* Exercise 2.30
+Direct implementation:
+#+BEGIN_SRC scheme
+  (define (square-tree tree)
+    (cond ((null? tree) '())
+          ((not (pair? tree)) (* tree tree))
+          (else (cons (square-tree (car tree))
+                      (square-tree (cdr tree))))))
+
+  (square-tree
+   (list 1
+         (list 2 (list 3 4) 5)
+         (list 6 7)))
+#+END_SRC
+
+#+RESULTS:
+| 1 | (4 (9 16) 25) | (36 49) |
+
+Map implementation:
+#+BEGIN_SRC scheme
+  (define (square-tree tree)
+    (map (lambda (sub-tree)
+           (if (not (pair? sub-tree))
+               (* sub-tree sub-tree)
+               (square-tree sub-tree)))
+         tree))
+  (square-tree
+   (list 1
+         (list 2 (list 3 4) 5)
+         (list 6 7)))
+
+#+END_SRC
+
+#+RESULTS:
+| 1 | (4 (9 16) 25) | (36 49) |
