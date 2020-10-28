@@ -29,6 +29,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-226][Exercise 2.26]]
 - [[#exercise-227][Exercise 2.27]]
 - [[#exercise-228][Exercise 2.28]]
+- [[#exercise-229][Exercise 2.29]]
 
 * Common
 
@@ -799,3 +800,58 @@ Tree structure
 #+END_SRC
 #+RESULTS:
 | 1 | 2 | 3 | 4 |
+
+* Exercise 2.29
+
+#+NAME: mobile_basics
+#+BEGIN_SRC scheme
+  (define (make-mobile left right)
+    (list left right))
+  (define (make-branch length structure)
+    (list length structure))
+
+  (define (left-branch mobile)
+    (list-ref mobile 0))
+  (define (right-branch mobile)
+    (list-ref mobile 1))
+  (define (branch-length branch)
+    (list-ref branch 0))
+  (define (branch-structure branch)
+    (list-ref branch 1))
+
+  (define (total-weight mobile)
+    (if (not (pair? mobile))
+        mobile
+        (+ (total-weight (branch-structure (left-branch mobile)))
+           (total-weight (branch-structure (right-branch mobile))))))
+
+
+
+  (define my-mobile (make-mobile (make-branch 2 3)
+                                 (make-branch 1 (make-mobile (make-branch 1 2)
+                                                             (make-branch 3 5)))))
+  (total-weight my-mobile)
+
+#+END_SRC
+
+#+RESULTS:
+: 10
+
+#+BEGIN_SRC scheme
+  <<mobile_basics>>
+
+  (define (is-balanced? mobile)
+    (if (not (pair? mobile))
+        true
+        (and (= (* (total weight (branch-structure (left-branch mobile)))
+                   (branch-length left-branch))
+                (* (total weight (branch-structure (right-branch mobile)))
+                   (branch-length right-branch)))
+             (is-balanced? (branch-structure left-branch))
+             (is-balanced? (branch-structure right-branch)))))
+
+    (define my-mobile (make-mobile (make-branch 2 3)
+                                   (make-branch 1 (make-mobile (make-branch 1 2)
+                                                               (make-branch 3 5)))))
+    (is-balanced? my-mobile)
+#+END_SRC
