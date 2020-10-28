@@ -28,6 +28,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-225][Exercise 2.25]]
 - [[#exercise-226][Exercise 2.26]]
 - [[#exercise-227][Exercise 2.27]]
+- [[#exercise-228][Exercise 2.28]]
 
 * Common
 
@@ -779,3 +780,22 @@ Tree structure
 
 #+RESULTS:
 | 6 | 5 | (4 3) | (2 1) |
+
+* Exercise 2.28
+
+#+BEGIN_SRC scheme
+  (define (fringe items)
+    (cond ((null? items)
+           items)
+          ((not (pair? items))
+           (list items))
+          ((append (fringe (car items))
+                   (fringe (cdr items))))))
+
+
+  (define x (list (list 1 2) (list 3 4)))
+
+  (fringe x)
+#+END_SRC
+#+RESULTS:
+| 1 | 2 | 3 | 4 |
