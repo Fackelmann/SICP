@@ -837,21 +837,33 @@ Tree structure
 #+RESULTS:
 : 10
 
-#+BEGIN_SRC scheme
+#+BEGIN_SRC scheme :noweb yes :results output
   <<mobile_basics>>
 
-  (define (is-balanced? mobile)
+  (define (is-balanced? mobile)  
     (if (not (pair? mobile))
-        true
-        (and (= (* (total weight (branch-structure (left-branch mobile)))
-                   (branch-length left-branch))
-                (* (total weight (branch-structure (right-branch mobile)))
-                   (branch-length right-branch)))
-             (is-balanced? (branch-structure left-branch))
-             (is-balanced? (branch-structure right-branch)))))
+        #t
+        (let ((mobile-right-branch (right-branch mobile))
+              (mobile-left-branch (left-branch mobile)))
+          (and (= (* (total-weight (branch-structure mobile-left-branch))
+                     (branch-length mobile-left-branch))
+                  (* (total-weight (branch-structure mobile-right-branch))
+                     (branch-length mobile-right-branch)))
+               (is-balanced? (branch-structure mobile-left-branch))
+               (is-balanced? (branch-structure mobile-right-branch))))))
 
-    (define my-mobile (make-mobile (make-branch 2 3)
-                                   (make-branch 1 (make-mobile (make-branch 1 2)
-                                                               (make-branch 3 5)))))
-    (is-balanced? my-mobile)
+  (define my-mobile (make-mobile (make-branch 2 3)
+                                 (make-branch 1 (make-mobile (make-branch 1 2)
+                                                             (make-branch 3 5)))))
+  (display (is-balanced? my-mobile))
+
+  (define my-mobile-balanced (make-mobile (make-branch 2 3)
+                                          (make-branch 1 (make-mobile (make-branch 1 2)
+                                                                      (make-branch 0.5 4)))))
+  (display "\n")
+  (display (is-balanced? my-mobile-balanced))
 #+END_SRC
+
+#+RESULTS:
+: #f
+: #t
