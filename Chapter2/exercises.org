@@ -33,6 +33,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-230][Exercise 2.30]]
 - [[#exercise-231][Exercise 2.31]]
 - [[#exercise-232][Exercise 2.32]]
+- [[#exercise-233][Exercise 2.33]]
 
 * Common
 
@@ -969,3 +970,32 @@ Putting all together `(() (2) (3) (2 3) (1) (1 2) (1 3) (1 2 3))`
 | 1 | 2 |   |
 | 1 | 2 | 3 |
 
+* Exercise 2.33
+#+BEGIN_SRC scheme :results output
+  (define (accumulate op initial sequence)
+    (if (null? sequence)
+        initial
+        (op (car sequence)
+            (accumulate op initial (cdr sequence)))))
+
+  (define (map p sequence)
+    (accumulate (lambda (x y) (cons (p x) y)) '() sequence))
+
+  (define (append seq1 seq2)
+    (accumulate cons seq2 seq1))
+
+  (define (length sequence)
+    (accumulate (lambda (x y) (+ y 1)) 0 sequence))
+
+  (display (map (lambda (x) (+ 2 x)) (list 1 2 3)))
+  (display "\n")
+  (display (append (list 1 2 3) (list 4 5 6)))
+  (display "\n")
+  (display (length (list 1 2 3 4 5)))
+
+#+END_SRC
+
+#+RESULTS:
+: (3 4 5)
+: (1 2 3 4 5 6)
+: 5
