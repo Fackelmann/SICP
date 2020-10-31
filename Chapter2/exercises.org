@@ -35,6 +35,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-232][Exercise 2.32]]
 - [[#exercise-233][Exercise 2.33]]
 - [[#exercise-234][Exercise 2.34]]
+- [[#exercise-235][Exercise 2.35]]
 
 * Common
 
@@ -789,6 +790,7 @@ Tree structure
 
 * Exercise 2.28
 
+#+NAME: fringe
 #+BEGIN_SRC scheme
   (define (fringe items)
     (cond ((null? items)
@@ -1032,3 +1034,20 @@ Evaluate polynomial with Horner's rule:
 
 #+RESULTS:
 : 79
+
+* Exercise 2.35
+
+With `fringe` (`enumerate-tree`) it's easy to do. Not sure how `map` (hint) helps here.
+
+#+BEGIN_SRC scheme :noweb yes
+  <<fringe>>
+  <<sequence_procs>>
+  (define (count-leaves t)
+    (accumulate (lambda (x y) (+ 1 y)) 0 (fringe t)))
+
+  (define x (list (list 1 2) (list 3 4)))
+  (count-leaves x)
+#+END_SRC
+
+#+RESULTS:
+: 4
