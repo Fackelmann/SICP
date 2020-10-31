@@ -32,6 +32,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-229][Exercise 2.29]]
 - [[#exercise-230][Exercise 2.30]]
 - [[#exercise-231][Exercise 2.31]]
+- [[#exercise-232][Exercise 2.32]]
 
 * Common
 
@@ -930,3 +931,41 @@ Map implementation:
 
 #+RESULTS:
 | 1 | (4 (9 16) 25) | (36 49) |
+
+* Exercise 2.32
+
+We start by specifying that the subsets of an empty set, is the empty set: `(())`
+
+Then, the other insight is that the subsets can be obtained by:
+- Getting the subsets of the set minus one element (`let ((rest (substes (cdr s))))...`)
+- And adding the element to every subset we obtained (also including the subsets without the element)
+
+For example, let's say que have `(1 2 3)`
+
+If we find the subsets of `(2 3)` we have: `(() (2) (3) (2 3))`
+Now if we add 1 to those subsets `((1) (1 2) (1 3) (1 2 3))`
+Putting all together `(() (2) (3) (2 3) (1) (1 2) (1 3) (1 2 3))`
+
+#+BEGIN_SRC scheme
+  (define (subsets s)
+    (if (null? s)
+        (list '())
+        (let ((rest (subsets (cdr s))))
+          (append rest
+                  (map
+                   (lambda (l) (cons (car s) l))
+                   rest)))))
+
+  (subsets (list 1 2 3))
+#+END_SRC
+
+#+RESULTS:
+|---+---+---|
+| 3 |   |   |
+| 2 |   |   |
+| 2 | 3 |   |
+| 1 |   |   |
+| 1 | 3 |   |
+| 1 | 2 |   |
+| 1 | 2 | 3 |
+
