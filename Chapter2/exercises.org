@@ -40,7 +40,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 
 * Common
 
-Defining commong functions here, so we don't need to repeat them over all the code blocks. 
+Defining common functions here, so we don't need to repeat them over all the code blocks. 
 #+NAME: common_block
 #+BEGIN_SRC scheme
   (define (square x)
