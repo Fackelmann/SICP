@@ -36,6 +36,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-233][Exercise 2.33]]
 - [[#exercise-234][Exercise 2.34]]
 - [[#exercise-235][Exercise 2.35]]
+- [[#exercise-236][Exercise 2.36]]
 
 * Common
 
@@ -1051,3 +1052,24 @@ With `fringe` (`enumerate-tree`) it's easy to do. Not sure how `map` (hint) help
 
 #+RESULTS:
 : 4
+
+* Exercise 2.36
+
+#+BEGIN_SRC scheme :noweb yes
+  <<sequence_procs>>
+  (define (accumulate-n op init seqs)
+    (if (null? (car seqs))
+        '()
+        (cons (accumulate op init (map (lambda (x) (car x))
+                                       seqs))
+              (accumulate-n op init (map (lambda (x) (cdr x))
+                                         seqs)))))
+
+
+  (define s (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+
+  (accumulate-n + 0 s)
+#+END_SRC
+
+#+RESULTS:
+| 22 | 26 | 30 |
