@@ -41,6 +41,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-238][Exercise 2.38]]
 - [[#exercise-239][Exercise 2.39]]
 - [[#exercise-240][Exercise 2.40]]
+- [[#exercise-241][Exercise 2.41]]
 
 * Common
 
@@ -1282,3 +1283,36 @@ We have ~(n choose 2)~ possible pairs
 | 4 | 1 |
 | 4 | 2 |
 | 4 | 3 |
+
+* Exercise 2.41
+
+#+BEGIN_SRC scheme :noweb yes
+  <<sequence_procs>>
+  <<permutation>>
+
+  (define (unique-triples n)
+    (flatmap (lambda (i)
+               (flatmap (lambda (j)
+                          (map (lambda (k) (list i j k))
+                               (enumerate-interval 1 (- j 1))))
+                (enumerate-interval 1 (- i 1))))
+    (enumerate-interval 1 n)))
+
+  (define (make-triple-sum triple)
+    (list (car triple) (cadr triple) (caddr triple) (+ (car triple) (cadr triple) (caddr triple))))
+
+  (define (sum-to-s triple s)
+    (= (+ (car triple) (cadr triple) (caddr triple)) s))
+
+  (define (triple-sum-to-s n s)
+    (map make-triple-sum
+         (filter (lambda (x) (sum-to-s x s))
+                 (unique-triples n))))
+
+  (triple-sum-to-s 5 9)
+
+#+END_SRC
+
+#+RESULTS:
+| 4 | 3 | 2 | 9 |
+| 5 | 3 | 1 | 9 |
