@@ -39,6 +39,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-236][Exercise 2.36]]
 - [[#exercise-237][Exercise 2.37]]
 - [[#exercise-238][Exercise 2.38]]
+- [[#exercise-239][Exercise 2.39]]
+- [[#exercise-240][Exercise 2.40]]
 
 * Common
 
@@ -992,6 +994,10 @@ Putting all together ~(() (2) (3) (2 3) (1) (1 2) (1 3) (1 2 3))~
            (cons (car sequence)
                  (filter predicate (cdr sequence))))
           (else (filter predicate (cdr sequence)))))
+  (define (enumerate-interval low high)
+    (if (> low high)
+        '()
+        (cons low (enumerate-interval (+ low 1) high))))
 #+END_SRC
 
 #+BEGIN_SRC scheme :noweb yes :results output
@@ -1183,3 +1189,96 @@ We need 2 properties:
 - Associativity, because the order in which we perform the operations changes between fold-left and fold-right
 
 An example of an ~op~ that would satisfy this is ~+~
+
+* Exercise 2.39
+
+First, trying to understand that flatmap and lambda func:
+
+#+BEGIN_SRC scheme :noweb yes
+  <<sequence_procs>>
+  (define (enumerate-interval low high)
+    (if (> low high)
+        '()
+        (cons low (enumerate-interval (+ low 1) high))))
+
+
+  (accumulate append
+              '()
+              (map (lambda (i)
+                     (map (lambda (j) (list i j))
+                          (enumerate-interval 1 (- i 1))))
+                   (enumerate-interval 1 10)))
+
+  (enumerate-interval 1 10)
+
+  (map (lambda (i)
+         (map (lambda (j) (list i j))
+              (enumerate-interval 1 (- i 1))))
+       (enumerate-interval 1 10))
+#+END_SRC
+
+#+RESULTS:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------|
+| (2 1)  |        |        |        |        |        |        |        |        |
+| (3 1)  | (3 2)  |        |        |        |        |        |        |        |
+| (4 1)  | (4 2)  | (4 3)  |        |        |        |        |        |        |
+| (5 1)  | (5 2)  | (5 3)  | (5 4)  |        |        |        |        |        |
+| (6 1)  | (6 2)  | (6 3)  | (6 4)  | (6 5)  |        |        |        |        |
+| (7 1)  | (7 2)  | (7 3)  | (7 4)  | (7 5)  | (7 6)  |        |        |        |
+| (8 1)  | (8 2)  | (8 3)  | (8 4)  | (8 5)  | (8 6)  | (8 7)  |        |        |
+| (9 1)  | (9 2)  | (9 3)  | (9 4)  | (9 5)  | (9 6)  | (9 7)  | (9 8)  |        |
+| (10 1) | (10 2) | (10 3) | (10 4) | (10 5) | (10 6) | (10 7) | (10 8) | (10 9) |
+
+
+Let's try the permutation example
+#+NAME: permutation
+#+BEGIN_SRC scheme :noweb yes
+  <<sequence_procs>>
+  (define (flatmap proc seq)
+    (accumulate append '() (map proc seq)))
+
+  (define (remove element seq)
+    (filter (lambda (x) (not (= x element)))
+            seq))
+
+  (define (permutations s)
+    (if (null? s)                    ; empty set?
+        (list '())                   ; sequence containing empty set
+        (flatmap (lambda (x)
+                   (map (lambda (p) (cons x p))
+                        (permutations (remove x s))))
+                 s)))
+  (permutations '(3 1 2))
+#+END_SRC
+
+#+RESULTS: permutation
+| 3 | 1 | 2 |
+| 3 | 2 | 1 |
+| 1 | 3 | 2 |
+| 1 | 2 | 3 |
+| 2 | 3 | 1 |
+| 2 | 1 | 3 |
+
+* Exercise 2.40
+
+#+NAME: unique-pairs
+#+BEGIN_SRC scheme :noweb yes
+  <<sequence_procs>> ;; for enumerate-interval
+  <<permutation>>  ;; for flatmap
+  (define (unique-pairs n)
+    (flatmap (lambda (j)
+               (map (lambda (i) (list j i))
+                    (enumerate-interval 1 (- j  1))))
+             (enumerate-interval 1 n)))
+
+  (unique-pairs 4)
+#+END_SRC
+
+We have ~(n choose 2)~ possible pairs
+#+RESULTS: unique-pairs
+| 2 | 1 |
+| 3 | 1 |
+| 3 | 2 |
+| 4 | 1 |
+| 4 | 2 |
+| 4 | 3 |
