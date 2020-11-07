@@ -42,6 +42,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-239][Exercise 2.39]]
 - [[#exercise-240][Exercise 2.40]]
 - [[#exercise-241][Exercise 2.41]]
+- [[#exercise-242][Exercise 2.42]]
 
 * Common
 
@@ -1309,10 +1310,90 @@ We have ~(n choose 2)~ possible pairs
          (filter (lambda (x) (sum-to-s x s))
                  (unique-triples n))))
 
-  (triple-sum-to-s 5 9)
-
+  (triple-sum-to-s 7 12)
 #+END_SRC
 
 #+RESULTS:
-| 4 | 3 | 2 | 9 |
-| 5 | 3 | 1 | 9 |
+| 5 | 4 | 3 | 12 |
+| 6 | 4 | 2 | 12 |
+| 6 | 5 | 1 | 12 |
+| 7 | 3 | 2 | 12 |
+| 7 | 4 | 1 | 12 |
+
+* Exercise 2.42
+
+Interesting! I remember solving on this problem on assembler back in my college days.
+
+#+NAME: queens
+#+BEGIN_SRC scheme :noweb yes
+  <<sequence_procs>>
+  <<permutation>>
+
+  ;; Ended up spending 2 hours debugging my program because I was creating a list with an empty list:
+  ;; (list '())
+  ;; So far this is the biggest drawback I see to Lisp. Backtrace is very unhelpful
+  (define empty-board '() )
+
+  (define (adjoin-position row column rest)
+    (cons (list row column) rest))
+
+  (define (get-row queen)
+    (car queen))
+
+  (define (get-column queen)
+    (cadr queen))
+
+  (define (same-column? first_queen second_queen)
+    (= (get-column first_queen) (get-column second_queen)))
+
+  (define (same-row? first_queen second_queen)
+    (= (get-row first_queen) (get-row second_queen)))
+
+  (define (same-diagonal? first_queen second_queen)
+    (or (= (+ (get-row first_queen) (get-column first_queen))
+           (+ (get-row second_queen) (get-column second_queen)))
+        (= (- (get-row first_queen) (get-column first_queen))
+           (- (get-row second_queen) (get-column second_queen)))))
+
+
+  (define (safe? column queens)
+    ;; I probably can extract these 2 into methods...
+    (let ((queen (car (filter (lambda (queen) (= (get-column queen) column)) queens)))
+          (rest (filter (lambda (queen) (not (= (get-column queen) column))) queens)))
+      (cond ((null? rest) #t)
+            ;; Check if all the checks are False by using accumulate
+            (else (not (accumulate (lambda (x y) (or x y)) #f 
+                             (map (lambda (comp-queen) (or (same-column? queen comp-queen)
+                                                           (same-row? queen comp-queen)
+                                                           (same-diagonal? queen comp-queen)))
+                                  rest)))))))
+
+  (define (queens board-size)
+    (define (queen-cols k)
+      (if (= k 0)
+          (list empty-board)
+          (filter
+           (lambda (positions) (safe? k positions))
+           (flatmap
+            (lambda (rest-of-queens)
+              (map (lambda (new-row)
+                     (adjoin-position new-row k rest-of-queens))
+                   (enumerate-interval 1 board-size)))
+            (queen-cols (- k 1))))))
+    (queen-cols board-size))
+
+  (queens 6)
+#+END_SRC
+
+#+RESULTS: queens
+| (5 6) | (3 5) | (1 4) | (6 3) | (4 2) | (2 1) |
+| (4 6) | (1 5) | (5 4) | (2 3) | (6 2) | (3 1) |
+| (3 6) | (6 5) | (2 4) | (5 3) | (1 2) | (4 1) |
+| (2 6) | (4 5) | (6 4) | (1 3) | (3 2) | (5 1) |
+
+Result:
+| (5 6) | (3 5) | (1 4) | (6 3) | (4 2) | (2 1) |
+| (4 6) | (1 5) | (5 4) | (2 3) | (6 2) | (3 1) |
+| (3 6) | (6 5) | (2 4) | (5 3) | (1 2) | (4 1) |
+| (2 6) | (4 5) | (6 4) | (1 3) | (3 2) | (5 1) |
+
