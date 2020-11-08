@@ -44,6 +44,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-241][Exercise 2.41]]
 - [[#exercise-242][Exercise 2.42]]
 - [[#exercise-243][Exercise 2.43]]
+- [[#exercise-244][Exercise 2.44]]
 
 * Common
 
@@ -1424,5 +1425,15 @@ Finally, for a board of size n:
 
 #+BEGIN_SRC
 O(n*(n*((n-1)*(n-1)...) = O(n^n*(n-1)^(n-1)...)~ O(n^n)
+#+END_SRC
+
+* Exercise 2.44
+
+#+BEGIN_SRC scheme
+  (define (up-split painter n)
+    (if (= n 0)
+        painter
+        (let ((smaller (up-split painter (- n 1))))
+          (below painter (besides smaller smaller)))))
 #+END_SRC
 
