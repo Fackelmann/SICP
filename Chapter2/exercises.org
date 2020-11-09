@@ -46,6 +46,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-243][Exercise 2.43]]
 - [[#exercise-244][Exercise 2.44]]
 - [[#exercise-245][Exercise 2.45]]
+- [[#exercise-246][Exercise 2.46]]
 
 * Common
 
@@ -1450,3 +1451,47 @@ O(n*(n*((n-1)*(n-1)...) = O(n^n*(n-1)^(n-1)...)~ O(n^n)
   (define right-split (split beside below))
   (define up-split (split below beside))
 #+END_SRC
+
+* Exercise 2.46
+#+BEGIN_SRC scheme :results output
+  (define (make-vect x y)
+    (cons x y))
+
+  (define (xcor-vect vect)
+    (car vect))
+
+  (define (ycor-vect vect)
+    (cdr vect))
+
+  (define (add-vect vect1 vect2)
+    (make-vect (+ (xcor-vect vect1)
+                  (xcor-vect vect2))
+               (+ (ycor-vect vect1)
+                  (ycor-vect vect2))))
+
+  (define (sub-vect vect1 vect2)
+    (make-vect (- (xcor-vect vect1)
+                  (xcor-vect vect2))
+               (- (ycor-vect vect1)
+                  (ycor-vect vect2))))
+
+  (define (scale-vect s vect)
+    (make-vect (* s (xcor-vect vect))
+               (* s (ycor-vect vect))))
+
+  (define vector-1 (make-vect 2 7))
+  (define vector-2 (make-vect 3 5))
+
+  (display (add-vect vector-1 vector-2))
+  (display "\n")
+  (display (sub-vect vector-1 vector-2))
+  (display "\n")
+  (display (scale-vect 3 vector-1))
+  (display "\n")
+
+#+END_SRC
+
+#+RESULTS:
+: (5 . 12)
+: (-1 . 2)
+: (6 . 21)
