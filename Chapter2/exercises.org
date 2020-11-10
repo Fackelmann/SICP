@@ -47,6 +47,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-244][Exercise 2.44]]
 - [[#exercise-245][Exercise 2.45]]
 - [[#exercise-246][Exercise 2.46]]
+- [[#exercise-247][Exercise 2.47]]
 
 * Common
 
@@ -1453,6 +1454,7 @@ O(n*(n*((n-1)*(n-1)...) = O(n^n*(n-1)^(n-1)...)~ O(n^n)
 #+END_SRC
 
 * Exercise 2.46
+#+NAME: vectors
 #+BEGIN_SRC scheme :results output
   (define (make-vect x y)
     (cons x y))
@@ -1462,7 +1464,6 @@ O(n*(n*((n-1)*(n-1)...) = O(n^n*(n-1)^(n-1)...)~ O(n^n)
 
   (define (ycor-vect vect)
     (cdr vect))
-
   (define (add-vect vect1 vect2)
     (make-vect (+ (xcor-vect vect1)
                   (xcor-vect vect2))
@@ -1495,3 +1496,37 @@ O(n*(n*((n-1)*(n-1)...) = O(n^n*(n-1)^(n-1)...)~ O(n^n)
 : (5 . 12)
 : (-1 . 2)
 : (6 . 21)
+
+* Exercise 2.47
+
+Using ~list~:
+#+BEGIN_SRC scheme :noweb yes
+  <<vectors>>
+  (define (make-frame origin edge1 edge2)
+    (list origin edge1 edge2))
+
+  (define (origin-frame frame)
+    (car frame))
+
+  (define (edge1-frame frame)
+    (cadr frame))
+
+  (define (edge2-frame frame)
+    (caddr frame))
+#+END_SRC
+
+Using ~cons~:
+#+BEGIN_SRC scheme :noweb yes
+  <<vectors>>
+  (define (make-frame origin edge1 edge2)
+    (cons origin (cons edge1 edge2)))
+
+  (define (origin-frame frame)
+    (car frame))
+
+  (define (edge1-frame frame)
+    (cadr frame))
+
+  (define (edge2-frame frame)
+    (cddr frame))
+#+END_SRC
