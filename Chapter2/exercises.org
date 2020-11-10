@@ -48,6 +48,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-245][Exercise 2.45]]
 - [[#exercise-246][Exercise 2.46]]
 - [[#exercise-247][Exercise 2.47]]
+- [[#exercise-248][Exercise 2.48]]
 
 * Common
 
@@ -1490,6 +1491,15 @@ O(n*(n*((n-1)*(n-1)...) = O(n^n*(n-1)^(n-1)...)~ O(n^n)
   (display (scale-vect 3 vector-1))
   (display "\n")
 
+  (define (frame-coord-map frame)
+    (lambda (v)
+      (add-vect
+       (origin-frame frame)
+       (add-vect (scale-vect (xcor-vect v)
+                             (edge1-frame frame))
+                 (scale-vect (ycor-vect v)
+                             (edge2-frame frame))))))
+
 #+END_SRC
 
 #+RESULTS:
@@ -1529,4 +1539,17 @@ Using ~cons~:
 
   (define (edge2-frame frame)
     (cddr frame))
+#+END_SRC
+
+* Exercise 2.48
+#+BEGIN_SRC scheme :noweb yes
+  <<vectors>>
+  (define (make-segment start-vec end-vec)
+    (cons start-vec end-vec))
+
+  (define (start-segment segment)
+    (car segment))
+
+  (define (end-segment segment)
+    (cdr segment))
 #+END_SRC
