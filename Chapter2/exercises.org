@@ -50,6 +50,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-247][Exercise 2.47]]
 - [[#exercise-248][Exercise 2.48]]
 - [[#exercise-249][Exercise 2.49]]
+- [[#exercise-250][Exercise 2.50]]
+- [[#exercise-251][Exercise 2.51]]
 
 * Common
 
@@ -1591,4 +1593,68 @@ Using ~cons~:
                                (make-segment edge1 edge2)))))
 
 
+#+END_SRC
+
+* Exercise 2.50
+#+BEGIN_SRC scheme
+  ;; Normal coordinate frame
+  ;; ^e2
+  ;; |
+  ;; .-->e1
+  ;; o
+
+
+  ;; Flip hor
+  ;;   ^e2
+  ;;   |
+  ;;<--.o
+  ;;e1
+  (define (flip-horiz painter)
+    (transform-painter painter
+                       (make-vect 1.0 0.0)   ; new `origin'
+                       (make-vect 0.0 0.0)   ; new end of `edge1'
+                       (make-vect 1.0 1.0))) ; new end of `edge2'
+
+  ;; Flip 180 degrees
+  ;; <--.o
+  ;; e1 |
+  ;;    v e2
+  (define (flip-180 painter)
+    (transform-painter painter
+                       (make-vect 1.0 1.0)
+                       (make-vect 0.0 1.0)
+                       (make-vect 1.0 0.0)))
+
+  ;; Flip 270 degrees
+  ;;   ^e1
+  ;;   |
+  ;;<--.o
+  ;;e2
+  (define (flip-270 painter)
+    (transform-painter painter
+                       (make-vect 1.0 0.0)
+                       (make-vect 1.0 1.0)
+                       (make-vect 0.0 0.0)))
+#+END_SRC
+
+* Exercise 2.51
+
+#+BEGIN_SRC scheme
+  (define (below painter1 painter2)
+    (let ((split-point (make-vect 0.0 0.5)))
+      (let ((paint-up
+             (transform-painter painter1
+                                split-point
+                                (make-vect 1.0 0.5)
+                                (make-vect 0.0 1.0)))
+            (paint-down
+             (transform-painter painter2
+                                (make-vect 0.0 0.0)
+                                (make-vect 1.0 0.0)
+                                split-point)))
+        (lambda (frame)
+          (paint-up frame)
+          (paint-down frame)))))
+
+  ;; TODO continue here
 #+END_SRC
