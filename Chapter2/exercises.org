@@ -53,6 +53,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-250][Exercise 2.50]]
 - [[#exercise-251][Exercise 2.51]]
 - [[#exercise-253][Exercise 2.53]]
+- [[#exercise-254][Exercise 2.54]]
+- [[#exercise-255][Exercise 2.55]]
 
 * Common
 
@@ -1691,3 +1693,14 @@ Implementing ~below~ using ~beside~ and flip operations.
   (red shoes blue shocks)
 #+END_SRC
 
+
+* Exercise 2.54
+TODO
+
+* Exercise 2.55
+The symbol ~'~ is equivalent to (quote).
+
+So ~''abracadabra~ is the same as (quote (quote abracadabra)), which evaluates to ~(quote abracadabra)~
+
+Therefore, ~(car ''abracadabra)~ will return ~quote~
+And ~(cdr ''abracadabra)~ will return ~(abracadabra)~
