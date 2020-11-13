@@ -52,6 +52,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-249][Exercise 2.49]]
 - [[#exercise-250][Exercise 2.50]]
 - [[#exercise-251][Exercise 2.51]]
+- [[#exercise-253][Exercise 2.53]]
 
 * Common
 
@@ -1665,3 +1666,28 @@ Implementing ~below~ using ~beside~ and flip operations.
     (flip-90 (beside (flip-270 painter1)
                      (flip-270 painter2))))
 #+END_SRC
+
+* Exercise 2.53
+#+BEGIN_SRC scheme
+  (list 'a 'b 'c)
+  (a b c)
+
+  (list (list 'george))
+  ((george))
+
+  (cdr '((x1 x2) (y1 y2)))
+  ((y1 y2))
+
+  (cadr '((x1 x2) (y1 y2)))
+  (y1 y2)
+
+  (pair? (car '(a short list)))
+  #f
+
+  (memq 'red '((red shoes) (blue socks)))
+  #f
+
+  (memq 'red '(red shoes blue socks))
+  (red shoes blue shocks)
+#+END_SRC
+
