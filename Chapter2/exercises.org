@@ -1639,6 +1639,8 @@ Using ~cons~:
 
 * Exercise 2.51
 
+Implementing ~below~ in a similar way as ~beside~
+
 #+BEGIN_SRC scheme
   (define (below painter1 painter2)
     (let ((split-point (make-vect 0.0 0.5)))
@@ -1655,6 +1657,11 @@ Using ~cons~:
         (lambda (frame)
           (paint-up frame)
           (paint-down frame)))))
+#+END_SRC
 
-  ;; TODO continue here
+Implementing ~below~ using ~beside~ and flip operations.
+#+BEGIN_SRC scheme
+  (define (below painter1 painter2)
+    (flip-90 (beside (flip-270 painter1)
+                     (flip-270 painter2))))
 #+END_SRC
