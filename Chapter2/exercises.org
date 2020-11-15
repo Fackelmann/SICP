@@ -55,6 +55,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-253][Exercise 2.53]]
 - [[#exercise-254][Exercise 2.54]]
 - [[#exercise-255][Exercise 2.55]]
+- [[#differentiator][Differentiator]]
+- [[#exercise-256][Exercise 2.56]]
 
 * Common
 
@@ -1723,3 +1725,128 @@ So ~''abracadabra~ is the same as (quote (quote abracadabra)), which evaluates t
 
 Therefore, ~(car ''abracadabra)~ will return ~quote~
 And ~(cdr ''abracadabra)~ will return ~(abracadabra)~
+
+* Differentiator
+#+NAME: differentiator
+#+BEGIN_SRC scheme
+  (define (deriv exp var)
+    (cond ((number? exp) 0)
+          ((variable? exp)
+           (if (same-variable? exp var) 1 0))
+          ((sum? exp)
+           (make-sum (deriv (addend exp) var)
+                     (deriv (augend exp) var)))
+          ((product? exp)
+           (make-sum
+            (make-product (multiplier exp)
+                          (deriv (multiplicand exp) var))
+            (make-product (deriv (multiplier exp) var)
+                          (multiplicand exp))))
+          (else
+           (error "unknown expression type -- DERIV" exp))))
+
+  (define (variable? x) (symbol? x))
+
+  (define (same-variable? v1 v2)
+    (and (variable? v1) (variable? v2) (eq? v1 v2)))
+
+  (define (=number? exp num)
+    (and (number? exp) (= exp num)))
+
+  (define (make-sum a1 a2)
+    (cond ((=number? a1 0) a2)
+          ((=number? a2 0) a1)
+          ((and (number? a1) (number? a2)) (+ a1 a2))
+          (else (list '+ a1 a2))))
+
+
+  (define (make-product m1 m2)
+    (cond ((or (=number? m1 0) (=number? m2 0)) 0)
+          ((=number? m1 1) m2)
+          ((=number? m2 1) m1)
+          ((and (number? m1) (number? m2)) (* m1 m2))
+          (else (list '* m1 m2))))
+
+  (define (sum? x)
+    (and (pair? x) (eq? (car x) '+)))
+
+  (define (addend s) (cadr s))
+  (define (augend s) (caddr s))
+
+  (define (product? x)
+    (and (pair? x) (eq? (car x) '*)))
+
+  (define (multiplier p) (cadr p))
+
+  (define (multiplicand p) (caddr p))
+
+  (deriv '(+ 2 2) 'x)
+#+END_SRC
+
+#+RESULTS: differentiator
+: 0
+
+* Exercise 2.56
+The exercise in the Emacs info version seems to be wrong:
+
+#+BEGIN_SRC 
+n_1   n_2
+--- = ---  if and only if n_1 d_2 = n_2 d_1
+d_1   d_2
+#+END_SRC
+
+Compared to the book
+
+#+BEGIN_SRC 
+d(u^n)              du
+------ = n*u^(n-1) ----
+  dx                dx
+#+END_SRC
+
+Let's tackle the second one
+
+#+BEGIN_SRC scheme :noweb yes :results value verbatim
+  <<differentiator>>
+  (define (deriv exp var)
+    (cond ((number? exp) 0)
+          ((variable? exp)
+           (if (same-variable? exp var) 1 0))
+          ((sum? exp)
+           (make-sum (deriv (addend exp) var)
+                     (deriv (augend exp) var)))
+          ((product? exp)
+           (make-sum
+            (make-product (multiplier exp)
+                          (deriv (multiplicand exp) var))
+            (make-product (deriv (multiplier exp) var)
+                          (multiplicand exp))))
+          ((exponentiation? exp)
+           (make-product (make-product (exponent exp)
+                                       (make-exponentiation (base exp)
+                                                            (- (exponent exp) 1)))
+                         (deriv (base exp) var)))
+          (else
+           (error "unknown expression type -- DERIV" exp))))
+
+  (define (make-exponentiation base exponent)
+    (cond ((=number? exponent 1) base)
+          ((=number? exponent 0) 1)
+          ((=number? base 0) 0)
+          ((and (number? base) (number? exponent)) (expt base exponent))
+          (else (list '** base exponent))))
+
+  (define (exponentiation? x)
+    (and (pair? x) (eq? (car x) '**)))
+
+  (define (base x)
+    (cadr x))
+
+  (define (exponent x)
+    (caddr x))
+
+  (deriv '(** x 2) 'x)
+#+END_SRC
+
+#+RESULTS:
+: (* 2 x)
+
