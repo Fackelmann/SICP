@@ -57,6 +57,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-255][Exercise 2.55]]
 - [[#differentiator][Differentiator]]
 - [[#exercise-256][Exercise 2.56]]
+- [[#exercise-257][Exercise 2.57]]
 
 * Common
 
@@ -1848,5 +1849,26 @@ Let's tackle the second one
 #+END_SRC
 
 #+RESULTS:
-: (* 2 x)
+: (+ (* x y) (* y x))
+
+* Exercise 2.57
+
+I was stuck on this exercise. Tryint to modify augend and make-sum using dotted-tail notation.
+
+Turns out it's straightforward if we use our old friend ~accumulate~ [[http://community.schemewiki.org/?sicp-ex-2.57][(ref)]] And conceptually it makes sense, we are making a sum over all the items in the expression's  augend.
+
+#+BEGIN_SRC scheme :noweb yes :results value verbatim
+  <<differentiator>>
+  <<sequence_procs>> ;; for accumulate
+  (define (augend s)    
+    (accumulate make-sum 0 (cddr s))) 
+
+  (define (multiplicand p)
+    (accumulate make-product 1 (cddr p)))
+
+  (deriv '(* x y (+ x 3)) 'x)
+#+END_SRC
+
+#+RESULTS:
+: (+ (* x y) (* y (+ x 3)))
 
