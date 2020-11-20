@@ -1913,6 +1913,8 @@ Using infix notation, instead of prefix. If we keep all the parenthesis it's eas
 : 4
 
 * Exercise 2.59
+
+For the union set we first short the input sets. We go over the short set, and if its car its an element of the long set, we add it to the solution. We then recursively call the helper union-set function over the cdr of the short set. 
 #+BEGIN_SRC scheme
   (define (element-of-set? x set)
     (cond ((null? set) #f)
