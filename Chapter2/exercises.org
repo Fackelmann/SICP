@@ -1941,14 +1941,15 @@ Using infix notation, instead of prefix. If we keep all the parenthesis it's eas
            (union-set (cdr set2) set1))
           (else (cons (car set2) (union-set (cdr set2) set1)))))
 
-  (union-set (list 1 7 2 4 3 5 21) (list 3 4 1 8 2 7 5))
+  ;; Theta(n^2). We run element-of-set? on every element of set2
+  (union-set (list 1 7 10) (list 3 4 1 8 2 7 5))
 #+END_SRC
 
 #+RESULTS:
-| 1 | 8 | 4 | 2 | 3 | 7 | 5 | 21 |
+| 3 | 4 | 1 | 10 | 8 | 2 | 7 | 5 |
 
 * Exercise 2.60
-#+BEGIN_SRC scheme
+#+BEGIN_SRC scheme :results output
   ;; allow for duplicates (list 2 3 2 1 3 2 2)
   ;; element-of-set? adjoin-set union-set intersection-set
 
@@ -1966,5 +1967,31 @@ Using infix notation, instead of prefix. If we keep all the parenthesis it's eas
            (cons (car set1)
                  (intersection-set (cdr set1) set2)))
           (else (intersection-set (cdr set1) set2))))
+
+    (define (union-set set1 set2)
+      (cond ((null? set2) set1)
+            ((element-of-set? (car set2) set1)
+             (union-set (cdr set2) set1))
+            (else (cons (car set2) (union-set (cdr set2) set1)))))
+
+  (display (element-of-set? 2 (list 2 3 2 1 3 2 2)))
+  (display "\n")
+  (display (adjoin-set 2 (list 2 3 2 1 3 2 2)))
+  (display "\n")
+  (display (intersection-set (list 4 4 1 2 1 5)
+                             (list 2 3 2 1 3 2 2)))
+  (display "\n")
+  (display (union-set (list 4 4 7 2 1 5)
+                      (list 2 3 2 1 3 2 2)))
 #+END_SRC
 
+#+RESULTS:
+: #t
+: (2 2 3 2 1 3 2 2)
+: (1 2 1)
+: (4 3 4 7 3 1 2 5 2)
+
+The only procedure that needs to be modified is ~adjoin-set~. We can make this a constant time operation as we don't need to check whether the element belongs to the set already, which is a ~Theta(n)~ operation.
+We pay for this in the procedures ~union-set~ and ~intersection-set~. These are still ~Theta(n^2)~, but now n grows with the number of elements of the set (not unique elements).
+This representation in an application that uses mainly adds new elements to a set and checks if they belong, as we trade a constant adjoin for a slightly increase in the linear time ~element-of-set?~.
+If we need to perform union and intersection operations frequently, the original representation would give us better performance.
