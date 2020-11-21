@@ -61,6 +61,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-258][Exercise 2.58]]
 - [[#exercise-259][Exercise 2.59]]
 - [[#exercise-260][Exercise 2.60]]
+- [[#exercise-261][Exercise 2.61]]
 
 * Common
 
@@ -1995,3 +1996,54 @@ The only procedure that needs to be modified is ~adjoin-set~. We can make this a
 We pay for this in the procedures ~union-set~ and ~intersection-set~. These are still ~Theta(n^2)~, but now n grows with the number of elements of the set (not unique elements).
 This representation in an application that uses mainly adds new elements to a set and checks if they belong, as we trade a constant adjoin for a slightly increase in the linear time ~element-of-set?~.
 If we need to perform union and intersection operations frequently, the original representation would give us better performance.
+
+* Exercise 2.61
+
+Now we consider the sets as ordered lists.
+
+Similarly to the case with ~element-of-set?~, in this implementation ~adjoin-set~ is also ~Theta(n/2)~. The number of steps is at most ~Theta(n)~, when the number we want to adjoin is largest than every number in the set. The procedure finishes as soon as it finds a number in the set equal or less than the adjoining number.
+
+#+NAME: ordered
+#+BEGIN_SRC scheme :results output
+
+  (define (element-of-set? x set)
+    (cond ((null? set) #f)
+          ((= x (car set)) #t)
+          ((< x (car set)) #f)
+          (else (element-of-set? x (cdr set)))))
+
+  (define (intersection-set set1 set2)
+    (if (or (null? set1) (null? set2))
+        '()
+        (let ((x1 (car set1)) (x2 (car set2)))
+          (cond ((= x1 x2)
+                 (cons x1
+                       (intersection-set (cdr set1)
+                                         (cdr set2))))
+                ((< x1 x2)
+                 (intersection-set (cdr set1) set2))
+                ((< x2 x1)
+                 (intersection-set set1 (cdr set2)))))))
+
+  (define (adjoin-set x set)
+    (cond ((null? set) (list x))
+          ((= x (car set)) set)
+          ((< x (car set)) (cons x set))
+          (else (cons (car set) (adjoin-set x (cdr set))))))
+
+  (display (adjoin-set 7 (list 1 2 4 9)))
+  (display "\n")
+  (display (adjoin-set 11 (list 1 2 4 9)))
+  (display "\n")
+  (display (adjoin-set -1 (list 1 2 4 9)))
+  (display "\n")
+  (display (adjoin-set 2 (list 1 2 4 9)))
+  (display "\n")
+#+END_SRC
+
+#+RESULTS:
+: (1 2 4 7 9)
+: (1 2 4 9 11)
+: (-1 1 2 4 9)
+: (1 2 4 9)
+
