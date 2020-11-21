@@ -62,6 +62,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-259][Exercise 2.59]]
 - [[#exercise-260][Exercise 2.60]]
 - [[#exercise-261][Exercise 2.61]]
+- [[#exercise-262][Exercise 2.62]]
 
 * Common
 
@@ -2046,4 +2047,37 @@ Similarly to the case with ~element-of-set?~, in this implementation ~adjoin-set
 : (1 2 4 9 11)
 : (-1 1 2 4 9)
 : (1 2 4 9)
+
+* Exercise 2.62
+
+#+BEGIN_SRC scheme :noweb yes :results output
+  <<ordered>>
+  ;; (1 2 4 5) (2 5 7 8 9)
+  ;; (4 5) (2 5 7 8 9)
+  (define (union-set set1 set2)
+    (cond ((null? set1) set2)
+          ((null? set2) set1)
+          (else (let ((x1 (car set1)) (x2 (car set2)))
+                  (cond ((< x1 x2)
+                         (cons x1 (union-set (cdr set1) set2)))
+                        ((> x1 x2)
+                         (cons x2 (union-set set1 (cdr set2))))
+                        (else (cons x1 (union-set (cdr set1) (cdr set2)))))))))
+
+  (display (union-set (list 1 2 4 5) (list 2 5 7 8 9)))
+  (display "\n")
+  (display (union-set (list 4 5) (list 2 5 7 8 9)))
+  (display "\n")
+  (display (union-set (list 1 7 10) (list 1 2 3 4 5 7 8)))
+#+END_SRC
+
+#+RESULTS:
+: (1 2 4 7 9)
+: (1 2 4 9 11)
+: (-1 1 2 4 9)
+: (1 2 4 9)
+: (1 2 4 5 7 8 9)
+: (2 4 5 7 8 9)
+: (1 2 3 4 5 7 8 10)
+
 
