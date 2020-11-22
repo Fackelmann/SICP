@@ -63,6 +63,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-260][Exercise 2.60]]
 - [[#exercise-261][Exercise 2.61]]
 - [[#exercise-262][Exercise 2.62]]
+- [[#exercise-263][Exercise 2.63]]
+- [[#exercise-264][Exercise 2.64]]
 
 * Common
 
@@ -2079,5 +2081,33 @@ Similarly to the case with ~element-of-set?~, in this implementation ~adjoin-set
 : (1 2 4 5 7 8 9)
 : (2 4 5 7 8 9)
 : (1 2 3 4 5 7 8 10)
+
+
+* Exercise 2.63
+
+- a) Both procedures perform an in-order trasversal of the tree, and produce the ordered list of the nodes. i.e: (1 3 5 7 9 11)
+- b) TODO
+
+* Exercise 2.64
+- a)
+The tree produced by ~(1 3 5 7 9 11)~ will look like:
+#+BEGIN_SRC 
+      5
+    /   \
+   1     9
+    \   / \
+     3 7  11
+#+END_SRC
+The ~partial-tree~ procedure works the following way.
+First, we define the left side of the tree to be ~floor( (n-1) / 2)~ and calculate this partial tree. We den set the current node to be the car of the remaining elements, and the right tree elemetns to be the cdr of the remaining elements. We calculate the right partial tree.
+Finally, we cons the constructed tree (node, left-tree, right-tree), and the remaining elements, which is passed up the stack.
+
+- b) 
+#+BEGIN_SRC 
+T(n) = T(n/2) + T(n/2) + O(1)
+T(n) = O(n)
+#+END_SRC
+Where the two ~T(n/2)~ come from the right and left ~partial-tree~ construction, and ~O(1)~ from the ~cons~ construction of the final tree.
+
 
 
