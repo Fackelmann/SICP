@@ -65,6 +65,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-262][Exercise 2.62]]
 - [[#exercise-263][Exercise 2.63]]
 - [[#exercise-264][Exercise 2.64]]
+- [[#exercise-265][Exercise 2.65]]
+- [[#exercise-266][Exercise 2.66]]
 
 * Common
 
@@ -2111,3 +2113,21 @@ Where the two ~T(n/2)~ come from the right and left ~partial-tree~ construction,
 
 
 
+* Exercise 2.65
+~union-set~ and ~intersection-set~ from exercises 2.61 and 2.62 are ~O(n)~, but work on ordered lists.
+
+We have just seen two methods for convertin from ordered list to binary tree, and viceversa, in ~O(n)~ time.
+
+We just need to make these conversion before applying our ~O(n)~ solutions on ordered lists (and afterwards to return the right type).
+
+* Exercise 2.66
+#+BEGIN_SRC scheme
+  (define (lookup given-key set-of-records)
+    (cond ((null? set-of-records) false)
+          ((= given-key (key (entry set-of-records)))
+           (entry set-of-records))
+          ((< given-key (key (entry set-of-records)))
+           (lookup given-key (left-branch set-of-records)))
+          ((> given-key (key (entry set-of-records)))
+           (lookup given-key (right-branch set-of-records)))))
+#+END_SRC
