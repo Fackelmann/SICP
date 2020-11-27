@@ -70,6 +70,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-267][Exercise 2.67]]
 - [[#exercise-267-1][Exercise 2.67]]
 - [[#exercise-268][Exercise 2.68]]
+- [[#exercise-269][Exercise 2.69]]
 
 * Common
 
@@ -2223,6 +2224,7 @@ We just need to make these conversion before applying our ~O(n)~ solutions on or
 | A | D | A | B | B | C | A |
 
 * Exercise 2.68
+#+NAME: encode
 #+BEGIN_SRC scheme :noweb yes
   <<huffman_procs>>
 
@@ -2264,3 +2266,29 @@ We just need to make these conversion before applying our ~O(n)~ solutions on or
 | 0 | 1 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 0 |
 
 The encoded message matches what we decoded in Exercise 2.67
+
+* Exercise 2.69
+#+BEGIN_SRC scheme :noweb yes :results value verbatim
+    <<huffman_procs>>
+    <<encode>>
+    (define (generate-huffman-tree pairs)
+      (successive-merge (make-leaf-set pairs)))
+
+    (define (successive-merge leaf-set)
+      (if (equal? (length leaf-set) 1)
+          (car leaf-set)
+          (let ((left (car leaf-set))
+                (right (cadr leaf-set)))
+            (let ((new-tree (make-code-tree left right)))
+              (successive-merge (adjoin-set new-tree (cddr leaf-set)))))))
+
+  ;;Encode the sample string in SCIP
+  ;;BACADAEAFABBAAAGAH
+  (define pairs '((A 8) (B 3) (C 1) (D 1) (E 1) (F 1) (G 1) (H 1)))
+  (define test-tree (generate-huffman-tree pairs))
+  ;;Make sure it's 42 bits
+  (length (encode '(B A C A D A E A F A B B A A A G A H) test-tree) )
+#+END_SRC
+
+#+RESULTS:
+: 42
