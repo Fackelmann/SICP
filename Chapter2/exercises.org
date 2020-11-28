@@ -71,6 +71,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-267-1][Exercise 2.67]]
 - [[#exercise-268][Exercise 2.68]]
 - [[#exercise-269][Exercise 2.69]]
+- [[#exercise-270][Exercise 2.70]]
 
 * Common
 
@@ -2268,6 +2269,7 @@ We just need to make these conversion before applying our ~O(n)~ solutions on or
 The encoded message matches what we decoded in Exercise 2.67
 
 * Exercise 2.69
+#+NAME: generate_huffman
 #+BEGIN_SRC scheme :noweb yes :results value verbatim
     <<huffman_procs>>
     <<encode>>
@@ -2292,3 +2294,30 @@ The encoded message matches what we decoded in Exercise 2.67
 
 #+RESULTS:
 : 42
+
+* Exercise 2.70
+
+#+BEGIN_SRC scheme :noweb yes :results values verbatim
+  <<huffman_procs>>
+  <<encode>>
+  <<generate_huffman>>
+  (define pairs '((A 2) (NA 16) (BOOM 1) (SHA 3) (GET 2) (YIP 9) (JOB 2) (WAH 1)))
+  (define message '(GET A JOB SHA NA NA NA NA NA NA NA NA GET A JOB SHA NA NA NA NA NA NA NA NA WAH YIP YIP YIP YIP YIP YIP YIP YIP YIP SHA BOOM))
+  (define code-tree (generate-huffman-tree pairs))
+
+  (length (encode message code-tree))
+#+END_SRC
+
+#+RESULTS:
+: 84
+
+The message is 84 bits long when encoded with a Huffman code.
+
+If we were to encode it with a fixed-length code, we have 8 different symbols, so 3 bits per symbol.
+
+The message consists of 36 words, so the message would be 3x36=102 bits long.
+
+
+
+
+
