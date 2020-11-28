@@ -73,6 +73,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-269][Exercise 2.69]]
 - [[#exercise-270][Exercise 2.70]]
 - [[#exercise-271][Exercise 2.71]]
+- [[#exercise-272][Exercise 2.72]]
 
 * Common
 
@@ -2335,3 +2336,14 @@ Let's see how the tree looks with n=5
 #+END_SRC
 
 All trees with same symbol frequency will have the same shape. The minimum number of bits we need to represent a symbol is 1, and the maximum, n-1
+
+* Exercise 2.72
+A worst case scenario for the order of growth can be calculated using exercise 2.71.
+
+In that case, for the least frequent symbol the order of growth of the number of steps needed to encode it will be:
+
+#+BEGIN_SRC 
+O(n*(n-1)) = O(n^2)
+#+END_SRC
+
+For the minimum number of steps, we only need to iterate through the list once: ~O(n)~
