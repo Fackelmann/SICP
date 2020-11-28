@@ -72,6 +72,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-268][Exercise 2.68]]
 - [[#exercise-269][Exercise 2.69]]
 - [[#exercise-270][Exercise 2.70]]
+- [[#exercise-271][Exercise 2.71]]
 
 * Common
 
@@ -2318,6 +2319,19 @@ If we were to encode it with a fixed-length code, we have 8 different symbols, s
 The message consists of 36 words, so the message would be 3x36=102 bits long.
 
 
+* Exercise 2.71
+Let's see how the tree looks with n=5
 
+#+BEGIN_SRC 
+            {a b c d e} 31
+              /      \
+            e 16   {a b c d} 15
+                     /   \
+                   d 8  {a b c} 7
+                         /  \
+                       c 4 {a b} 3
+                           /  \
+                         a 1  b 2
+#+END_SRC
 
-
+All trees with same symbol frequency will have the same shape. The minimum number of bits we need to represent a symbol is 1, and the maximum, n-1
