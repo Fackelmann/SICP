@@ -74,6 +74,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-270][Exercise 2.70]]
 - [[#exercise-271][Exercise 2.71]]
 - [[#exercise-272][Exercise 2.72]]
+- [[#exercise-273][Exercise 2.73]]
 
 * Common
 
@@ -2347,3 +2348,64 @@ O(n*(n-1)) = O(n^2)
 #+END_SRC
 
 For the minimum number of steps, we only need to iterate through the list once: ~O(n)~
+
+* Exercise 2.73 
+
+These results are not tested, as we don't have the ~put~ and ~get~ procedures yet (this will come in section 3).
+
+a) ~number?~ and ~same-variable?~ are predicates applied to untagged, single elements (numbers or variables).
+
+b)
+#+BEGIN_SRC scheme
+  (define (install-symbolic-derivation-package)
+    (define (deriv-sum exp var)
+      (make-sum (deriv (addend exp) var)
+                (deriv (augend exp) var)))
+    (put 'deriv '+ deriv-sum)
+
+    (define (deriv-product exp var)
+      (make-sum
+       (make-product (multiplier exp)
+                     (deriv (multiplicand exp) var))
+       (make-product (deriv (multiplier exp) var)
+                     (multiplicand exp))))
+    (put 'deriv '* deriv-product))
+
+  (define (deriv exp var)
+    (cond ((number? exp) 0)
+          ((variable? exp) (if (same-variable? exp var) 1 0))
+          (else ((get 'deriv (operator exp)) (operands exp)
+                 var))))
+
+  (define (operator exp) (car exp))
+
+  (define (operands exp) (cdr exp))
+#+END_SRC
+
+d) In this case we would have to swap the operands in our ~put~ operation. We could interpret it, in this case, as having a different set of operations for each arithmetic operator. For example we can install a derivation operation, simplification, etc.
+
+#+BEGIN_SRC scheme
+  (define (install-symbolic-derivation-package)
+    (define (deriv-sum exp var)
+      (make-sum (deriv (addend exp) var)
+                (deriv (augend exp) var)))
+    (put '+ 'deriv deriv-sum)
+
+    (define (deriv-product exp var)
+      (make-sum
+       (make-product (multiplier exp)
+                     (deriv (multiplicand exp) var))
+       (make-product (deriv (multiplier exp) var)
+                     (multiplicand exp))))
+    (put '* 'deriv deriv-product))
+
+  (define (deriv exp var)
+    (cond ((number? exp) 0)
+          ((variable? exp) (if (same-variable? exp var) 1 0))
+          (else ((get 'deriv (operator exp)) (operands exp)
+                 var))))
+
+  (define (operator exp) (car exp))
+
+  (define (operands exp) (cdr exp))
+#+END_SRC
