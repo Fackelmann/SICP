@@ -75,6 +75,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-271][Exercise 2.71]]
 - [[#exercise-272][Exercise 2.72]]
 - [[#exercise-273][Exercise 2.73]]
+- [[#exercise-274][Exercise 2.74]]
+- [[#exercise-275][Exercise 2.75]]
 
 * Common
 
@@ -2409,3 +2411,59 @@ d) In this case we would have to swap the operands in our ~put~ operation. We co
 
   (define (operands exp) (cdr exp))
 #+END_SRC
+
+* Exercise 2.74
+
+We can index the operations by division, implementing a different method suited for the particular implementations
+
+                
+| Operations | Division1            | Division2            |
+|------------+----------------------+----------------------|
+| get-record | get-record-division1 | get-record-division2 |
+| get-salary | get-salary-division1 | get-salary-division2 |
+| ...        |                      |                      |
+
+a)
+
+#+BEGIN_SRC scheme
+  (define (get-record division employee-name)
+    ((get 'get-record division) employee-name)
+#+END_SRC
+
+b)
+#+BEGIN_SRC scheme
+  (define (get-salary division employee-record)
+    ((get 'get-salary division) employee-record))
+#+END_SRC
+
+* Exercise 2.75
+#+BEGIN_SRC scheme 
+  ;; Needed to have `assert` in Guile
+  (import (rnrs (6)))
+
+  (define (make-from-mag-ang mag ang)
+    (define (dispatch op)
+      (cond ((eq? op 'magnitude) mag)
+            ((eq? op 'angle) ang)
+            ((eq? op 'real-part)
+             (* mag (cos ang)))
+            ((eq? op 'imag-part)
+             (* mag (sin ang)))))
+    dispatch)
+
+  (define (apply-generic op arg) (arg op))
+  (define (real-part z) (apply-generic 'real-part z))
+  (define (imag-part z) (apply-generic 'imag-part z))
+  (define (magnitude z) (apply-generic 'magnitude z))
+  (define (angle z) (apply-generic 'angle z))
+
+
+  (define z (make-from-mag-ang 1 0))
+  (assert (equal? (real-part z) 1))
+  (assert (equal? (imag-part z) 0))
+  (assert (equal? (magnitude z) 1))
+  (assert (equal? (angle z) 0))
+#+END_SRC
+
+#+RESULTS:
+: #t
