@@ -77,6 +77,13 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-273][Exercise 2.73]]
 - [[#exercise-274][Exercise 2.74]]
 - [[#exercise-275][Exercise 2.75]]
+- [[#exercise-276][Exercise 2.76]]
+  - [[#which-changes-must-be-made-to-a-system-in-order-to-add-new-types-or-new-operations][Which changes must be made to a system in order to add new types or new operations?]]
+    - [[#generic-operations-with-explicit-dispatch][Generic operations with explicit dispatch]]
+    - [[#data-directed-style][Data-directed style]]
+    - [[#message-passing-style][Message-passing style]]
+  - [[#which-organizations-would-be-most-appropriate-for-a-system-in-which-new-types-must-often-be-added][Which organizations would be most appropriate for a system in which new types must often be added?]]
+  - [[#which-would-be-most-appropriate-for-a-system-in-which-new-operations-must-often-be-added][Which would be most appropriate for a system in which new operations must often be added?]]
 
 * Common
 
@@ -2467,3 +2474,26 @@ b)
 
 #+RESULTS:
 : #t
+
+* Exercise 2.76
+
+** Which changes must be made to a system in order to add new types or new operations?
+
+*** Generic operations with explicit dispatch
+
+Adding a new type is easy. We need to create the constructor and attach the appropiate tag and modify the existing operations to include it.
+But adding a new operation means defining a new procedure, existing code doesnt need to be updated.
+
+*** Data-directed style
+Here, to add a new operation we just need to add it to the table in the installation procedure.
+Adding a new type would require defining an installation procedure where all the operations for this type are added to the symbol table.
+If we dont use the installation procedure defined in the book, both can be done without modifying existing code, as we only need to add a row or column to the symbol table.
+*** Message-passing style
+In message passing style all the operations are defined in the constructor for each type. Adding a new operation means adding it to all constructors.
+Adding a new type is done by defining a new procedure, without the need of modifying existing code.
+
+** Which organizations would be most appropriate for a system in which new types must often be added?
+Message-passing or data-directed
+
+** Which would be most appropriate for a system in which new operations must often be added?
+Generic operations with explicit dispatch, or data-directed
