@@ -88,6 +88,8 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#generic-arithmetic-operations][Generic arithmetic operations]]
 - [[#exercise-277][Exercise 2.77]]
 - [[#exercise-278][Exercise 2.78]]
+- [[#exercise-279][Exercise 2.79]]
+- [[#exercise-280][Exercise 2.80]]
 
 * Common
 
@@ -2639,3 +2641,41 @@ Finally, when we access the contents, a scheme number is its own content, we don
           ((pair? datum) (cdr datum))
           (else (error "Bad tagged datum -- CONTENTS" datum))))      
 #+END_SRC
+
+* Exercise 2.79
+
+Define a generic equality predicate `equ?' that tests the equality of two numbers, and install it in the generic arithmetic package.  This operation should work for ordinary numbers, rational numbers, and complex numbers.
+
+#+BEGIN_SRC scheme
+  (define (install-scheme-number-package)
+    ...
+    (define (equ? x y)
+      (equal? x y))
+
+    (put 'equ? '(scheme-number scheme-number)
+         (lambda (x y) (equ?-scheme x y))))
+
+  (define (install-polar-number-package)
+    ...
+
+    (define (equ? z1 z2)
+      (and (equal? (real z1) (real z2))
+           (equal? (imag z1) (imag z2))))
+
+    (put 'equ? '(complex complex)
+         (lambda (z1 z2) (equ? z1 z2))))
+
+  (define (install-rational-number-package)
+    ...
+    (define (equ? x y)
+      (and (equal? (numer x) (numer y))
+           (equal? (denom x) (denom y))))
+
+    (put 'equ? '(rational rational)
+         (lambda (x y) (equ? x y))))
+
+
+#+END_SRC
+
+* Exercise 2.80
+Same idea as in ex 2.79
