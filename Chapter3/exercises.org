@@ -1,0 +1,34 @@
+#+PROPERTY: header-args    :exports both
+This is an org-mode file with ~scheme~ code blocks. If you clone this repo you can execute each block inside this file with ~C-c C-c~.
+
+Because of some mysterious reason, results don't show up in the rendered github file. You can see them by opening the raw file.
+
+* Table of Contents :TOC:
+- [[#exercise-31][Exercise 3.1]]
+
+* Exercise 3.1
+
+#+BEGIN_SRC scheme :results output
+  (define (make-accumulator initial-value)
+    (let ((accumulator initial-value))
+      (lambda (x)
+        (set! accumulator (+ accumulator x))
+        accumulator)))
+
+
+  (define A (make-accumulator 5))
+  (define B (make-accumulator 10))
+
+  (display (A 10))
+  (display "\n")
+  (display (A 10))
+  (display "\n")
+  (display (B 13))
+
+#+END_SRC
+
+#+RESULTS:
+: 15
+: 25
+: 23
+
