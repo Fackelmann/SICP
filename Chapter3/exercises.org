@@ -5,6 +5,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 
 * Table of Contents :TOC:
 - [[#exercise-31][Exercise 3.1]]
+- [[#exercise-32][Exercise 3.2]]
 
 * Exercise 3.1
 
@@ -32,3 +33,22 @@ Because of some mysterious reason, results don't show up in the rendered github 
 : 25
 : 23
 
+* Exercise 3.2
+
+This solution only works for procs with one input argument:
+
+#+BEGIN_SRC scheme
+  (define (make-monitored proc)
+    (let ((calls 0))
+      (define (new-proc arg)
+        (set! calls (+ calls 1))
+        (proc arg))
+      (define (dispatch order)
+        (cond ((eq? order 'how-many-calls?) calls)
+              ((eq? order 'reset-count) (set! calls 0))
+              (else (new-proc order))))
+      dispatch))
+#+END_SRC
+
+
+We could think of generalizing it with dotted-tail notation and ~apply~.
