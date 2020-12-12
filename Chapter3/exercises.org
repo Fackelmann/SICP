@@ -6,6 +6,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 * Table of Contents :TOC:
 - [[#exercise-31][Exercise 3.1]]
 - [[#exercise-32][Exercise 3.2]]
+- [[#exercise-35][Exercise 3.5]]
 
 * Exercise 3.1
 
@@ -52,3 +53,46 @@ This solution only works for procs with one input argument:
 
 
 We could think of generalizing it with dotted-tail notation and ~apply~.
+
+* Exercise 3.5
+#+BEGIN_SRC scheme
+  (define (estimate-integral P x1 x2 y1 y2 trials)
+    (define (experiment)
+      (let ((rand-x (random-in-range x1 x2))
+            (rand-y (random-in-range y1 y2)))
+        (P rand-x rand-y)))
+    (* (monte-carlo trials experiment) (area-rectangle x1 x2 y1 y2)))
+
+  (define (unit-circle? x y)
+    (<= (+ (* x x)
+           (* y y))
+        1))
+
+
+
+  (define (area-rectangle x1 x2 y1 y2)
+    (* (- x2 x1) (- y2 y1)))
+
+  (define (random-in-range low high)
+    (let ((range (- high low)))
+      (+ low (random range))))
+
+  (define (monte-carlo trials experiment)
+    (define (iter trials-remaining trials-passed)
+      (cond ((= trials-remaining 0)
+             (/ trials-passed trials))
+            ((experiment)
+             (iter (- trials-remaining 1) (+ trials-passed 1)))
+            (else
+             (iter (- trials-remaining 1) trials-passed))))
+    (iter trials 0))
+
+
+  (estimate-integral unit-circle? -1 1.0 -1 1.0 1000)
+#+END_SRC
+
+#+RESULTS:
+: 3.176
+
+We need to define at least one x coordinate and one y coordinate to be floating point for ~random-in-range~ to return a floating point in that rante, and not an integer, which would be 0 for the unit circle.
+
