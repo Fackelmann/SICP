@@ -7,6 +7,7 @@ Because of some mysterious reason, results don't show up in the rendered github 
 - [[#exercise-31][Exercise 3.1]]
 - [[#exercise-32][Exercise 3.2]]
 - [[#exercise-35][Exercise 3.5]]
+- [[#exercise-38][Exercise 3.8]]
 
 * Exercise 3.1
 
@@ -95,4 +96,16 @@ We could think of generalizing it with dotted-tail notation and ~apply~.
 : 3.176
 
 We need to define at least one x coordinate and one y coordinate to be floating point for ~random-in-range~ to return a floating point in that rante, and not an integer, which would be 0 for the unit circle.
+
+* Exercise 3.8
+
+#+BEGIN_SRC scheme
+  (define f
+    (let* ((previous 1))
+      (lambda (x)
+        (let ((result (* previous x)))
+          (set! previous x)
+          result))))
+#+END_SRC
+
 
